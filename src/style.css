@@ -1,0 +1,72 @@
+body {
+    box-sizing: border-box;
+    background-color: whitesmoke;
+    --grid-width: clamp(35rem, 90vw, 90vh);
+}
+
+.grid {
+    font-family:
+        ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+        "DejaVu Sans Mono", monospace;
+    font-weight: normal;
+    border: black 2px solid;
+    width: var(--grid-width);
+    height: var(--grid-width);
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    cursor: pointer;
+    user-select: none;
+}
+
+.cell {
+    border: black 1px solid;
+}
+
+.cell.row0, .cell.row3,.cell.row6  {
+    border-top: black 2px solid;
+}
+
+.cell.row2, .cell.row5, .cell.row8{
+    border-bottom: black 2px solid;
+}
+
+.cell.col0, .cell.col3, .cell.col6 {
+    border-left: black 2px solid;
+}
+
+.cell.col2, .cell.col5, .cell.col8 {
+    border-right: black 2px solid;
+}
+
+.value {
+    font-size: 3rem;
+    display: grid;
+    place-content: center;
+}
+
+.notes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.note {
+    display: grid;
+    place-content: center;
+    color: #505050
+}
+
+.note.yes:hover {
+    color: red;
+}
+
+.note.no {
+    opacity: 0;
+}
+
+.note.no:hover {
+    opacity: 0.1;
+    /* visibility: visible; */
+}
