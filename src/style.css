@@ -2,6 +2,8 @@ body {
     box-sizing: border-box;
     background-color: whitesmoke;
     --grid-width: clamp(35rem, 90vw, 90vh);
+    --value-fontsize: clamp(3rem, 6vw, 6vh);
+    --note-fontsize: clamp(1rem, 2vw, 2vh);
 }
 
 .grid {
@@ -24,24 +26,32 @@ body {
     border: black 1px solid;
 }
 
-.cell.row0, .cell.row3,.cell.row6  {
+.cell.row0,
+.cell.row3,
+.cell.row6 {
     border-top: black 2px solid;
 }
 
-.cell.row2, .cell.row5, .cell.row8{
+.cell.row2,
+.cell.row5,
+.cell.row8 {
     border-bottom: black 2px solid;
 }
 
-.cell.col0, .cell.col3, .cell.col6 {
+.cell.col0,
+.cell.col3,
+.cell.col6 {
     border-left: black 2px solid;
 }
 
-.cell.col2, .cell.col5, .cell.col8 {
+.cell.col2,
+.cell.col5,
+.cell.col8 {
     border-right: black 2px solid;
 }
 
 .value {
-    font-size: 3rem;
+    font-size: var(--value-fontsize);
     display: grid;
     place-content: center;
 }
@@ -50,16 +60,18 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+    font-size: var(--note-fontsize);
 }
 
 .note {
     display: grid;
     place-content: center;
-    color: #505050
+    color: #505050;
 }
 
 .note.yes:hover {
     color: red;
+    font-size: 1.2em;
 }
 
 .note.no {
@@ -68,5 +80,4 @@ body {
 
 .note.no:hover {
     opacity: 0.1;
-    /* visibility: visible; */
 }
