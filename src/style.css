@@ -70,8 +70,8 @@ body {
 }
 
 .note.yes:hover {
-    color: red;
-    font-size: 1.2em;
+    border: blue 2px solid;
+    border-radius: 50%;
 }
 
 .note.no {
@@ -79,5 +79,21 @@ body {
 }
 
 .note.no:hover {
-    opacity: 0.1;
+    opacity: 0.3;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 5px 0;
+}
+
+.button {
+    border: 1px black solid;
+}
+
+.messageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
