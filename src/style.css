@@ -1,7 +1,7 @@
 body {
     box-sizing: border-box;
     background-color: whitesmoke;
-    --grid-width: clamp(35rem, 90vw, 90vh);
+    --grid-width: clamp(35rem, 90vw, 80vh);
     --value-fontsize: clamp(3rem, 6vw, 6vh);
     --note-fontsize: clamp(1rem, 2vw, 2vh);
 }
@@ -90,6 +90,9 @@ body {
 
 .button {
     border: 1px black solid;
+    cursor: pointer;
+    width: 10em;
+    text-align: center;
 }
 
 .messageContainer {

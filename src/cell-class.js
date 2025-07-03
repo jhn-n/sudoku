@@ -27,6 +27,13 @@ export class Cell {
         this.notes = 511;
     }
 
+    clone() {
+        const newCell = new Cell();
+        newCell.value = this.value;
+        newCell.notes = this.notes;
+        return newCell;
+    }
+    
     get noteCount() {
         let count = 0;
         let x = this.notes;
