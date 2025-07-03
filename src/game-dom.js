@@ -1,13 +1,12 @@
-export default {display}
-
 import grid from "./grid-mod";
+export default { display };
 
 const gridDiv = document.querySelector(".grid");
 
 function display() {
     gridDiv.innerHTML = "";
 
-    for (let i = 0; i < 81; i++) {
+    grid.allCells.forEach((i) => {
         const newCell = document.createElement("div");
         newCell.classList.add("cell");
         newCell.classList.add(`row${grid.rowOf(i)}`);
@@ -30,5 +29,5 @@ function display() {
             }
         }
         gridDiv.appendChild(newCell);
-    }
+    });
 }

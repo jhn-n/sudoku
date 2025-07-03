@@ -1,6 +1,5 @@
-export default {calculateNotesFromValues, noteClick, valueClick}
-
 import grid from "./grid-mod";
+export default {calculateNotesFromValues, noteClick, valueClick}
 
 function noteClick (i, j) {
     const clickedCell = this.cells[i];
