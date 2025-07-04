@@ -73,9 +73,9 @@ function rightValueClick(i) {
     }
 }
 
-function buttonClick(i) {
-    console.log("Button", i, "pressed");
-    switch (this.buttonText[i]) {
+function buttonClick(button) {
+    console.log("Button", button, "pressed");
+    switch (button) {
         case "reset":
             this.reset();
             break;

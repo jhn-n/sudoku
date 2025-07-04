@@ -1,14 +1,16 @@
 import grid from "./grid-mod";
 
-export default { display, setupButtonListeners };
+export default { display };
 
 const gridNode = document.querySelector(".grid");
-const buttonNodes = [
-    document.querySelector("#button1"),
-    document.querySelector("#button2"),
-    document.querySelector("#button3"),
-    document.querySelector("#button4"),
-];
+const buttonsNode = document.querySelector(".buttonContainer");
+
+// const buttonNodes = [
+//     document.querySelector("#button1"),
+//     document.querySelector("#button2"),
+//     document.querySelector("#button3"),
+//     document.querySelector("#button4"),
+// ];
 const message = document.querySelector("#message");
 const description = document.querySelector("#description");
 
@@ -46,9 +48,17 @@ function display() {
         }
         gridNode.appendChild(newCell);
 
-        for (let i = 0; i < buttonNodes.length; i++) {
-            buttonNodes[i].innerText = this.buttonText[i];
+        buttonsNode.innerHTML = "";
+        for (const buttonTxt of this.buttonText) {
+            const newButton = document.createElement("div");
+            newButton.classList.add("button");
+            newButton.innerText = buttonTxt;
+            newButton.addEventListener("click", () => this.buttonClick(buttonTxt));
+            buttonsNode.appendChild(newButton);
         }
+        // for (let i = 0; i < buttonNodes.length; i++) {
+        //     buttonNodes[i].innerText = this.buttonText[i];
+        // }
         if (this.testValidGame()) {
             message.innerText = this.message;
             description.innerText = this.description;
@@ -59,8 +69,8 @@ function display() {
     });
 }
 
-function setupButtonListeners() {
-    for (let i = 0; i < buttonNodes.length; i++) {
-        buttonNodes[i].addEventListener("click", () => this.buttonClick(i));
-    }
-}
+// function setupButtonListeners() {
+//     for (let i = 0; i < buttonNodes.length; i++) {
+//         buttonNodes[i].addEventListener("click", () => this.buttonClick(i));
+//     }
+// }
