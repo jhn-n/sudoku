@@ -1,4 +1,4 @@
-import grid from "./grid-mod";
+import squares from "./squares-mod";
 
 export default { display };
 
@@ -16,11 +16,11 @@ const description = document.querySelector("#description");
 
 function display() {
     gridNode.innerHTML = "";
-    grid.allSquares.forEach((i) => {
+    squares.all.forEach((i) => {
         const newCell = document.createElement("div");
         newCell.classList.add("cell");
-        newCell.classList.add(`row${grid.rowOf(i)}`);
-        newCell.classList.add(`col${grid.columnOf(i)}`);
+        newCell.classList.add(`row${squares.rowOf(i)}`);
+        newCell.classList.add(`col${squares.columnOf(i)}`);
 
         if (this.cells[i].value) {
             newCell.classList.add("value");
@@ -63,7 +63,7 @@ function display() {
             message.innerText = this.message;
             description.innerText = this.description;
         } else {
-            message.innerText = "Invalid grid!";
+            message.innerText = "Invalid squares!";
             description.innerText = "Restart or correct";
         }
     });

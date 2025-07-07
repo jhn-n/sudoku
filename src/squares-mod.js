@@ -1,4 +1,4 @@
-const allSquares = [...Array(81).keys()];
+const all = [...Array(81).keys()];
 
 function rowOf(c) {
     return Math.floor(c / 9);
@@ -71,9 +71,9 @@ for (let r = 0; r < 9; r += 3) {
 }
 
 const neighbours = [];
-allSquares.forEach((i) => {
+all.forEach((i) => {
     const currentNeighbours = [];
-    allSquares.forEach((j) => {
+    all.forEach((j) => {
         if (j !== i && sameLine(i, j)) {
             currentNeighbours.push(j);
         }
@@ -92,5 +92,5 @@ export default {
     columns,
     blocks,
     lines,
-    allSquares,
+    all,
 };

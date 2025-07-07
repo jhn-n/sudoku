@@ -1,4 +1,4 @@
-import grid from "./grid-mod.js";
+import squares from "./squares-mod.js";
 export default {
     recalculateNotesFromValues,
     updateNotesForNewValue,
@@ -7,29 +7,27 @@ export default {
 };
 
 function recalculateNotesFromValues() {
-    console.time("calc notes");
-    grid.allSquares.forEach((i) => {
+    squares.all.forEach((i) => {
         if (!this.cells[i].value) {
             this.cells[i].reset();
         }
     });
-    grid.allSquares.forEach((i) => {
+    squares.all.forEach((i) => {
         if (this.cells[i].value) {
-            grid.neighbours[i].forEach((j) => {
+            squares.neighbours[i].forEach((j) => {
                 this.cells[j].removeNote(this.cells[i].value);
             });
         }
     });
-    console.timeEnd("calc notes");
 }
 
 function updateNotesForNewValue(i) {
-    grid.neighbours[i].forEach((j) => this.cells[j].removeNote(this.cells[i].value));
+    squares.neighbours[i].forEach((j) => this.cells[j].removeNote(this.cells[i].value));
 }
 
 function testValidGame() {
     this.validGame = true;
-    for (const i of grid.allSquares) {
+    for (const i of squares.all) {
         if (this.cells[i].value === null && this.cells[i].noteCount === 0) {
             this.validGame = false;
             break;
@@ -42,13 +40,13 @@ function undoValue(i) {
     const clickedCell = this.cells[i];
     const valueToUndo = clickedCell.value;
     clickedCell.reset();
-    grid.neighbours[i].forEach((j) => {
+    squares.neighbours[i].forEach((j) => {
         const neighbour = this.cells[j];
         if (neighbour.value) {
             clickedCell.removeNote(neighbour.value);
         } else {
             neighbour.addNote(valueToUndo);
-            for (const k of grid.neighbours[j]) {
+            for (const k of squares.neighbours[j]) {
                 if (this.cells[k].value === valueToUndo) {
                     neighbour.removeNote(valueToUndo);
                     break;

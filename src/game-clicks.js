@@ -1,4 +1,4 @@
-import grid from "./grid-mod";
+import squares from "./squares-mod";
 export default { noteClick, rightNoteClick, valueClick, rightValueClick, buttonClick };
 
 function noteClick(i, j) {
@@ -17,7 +17,7 @@ function noteClick(i, j) {
                 this.updateNotesForNewValue(i);
                 this.display();
             } else {
-                if (grid.neighbours[i].every((i) => this.cells[i].value !== j)) {
+                if (squares.neighbours[i].every((i) => this.cells[i].value !== j)) {
                     clickedCell.addNote(j);
                     this.display();
                 }
@@ -37,7 +37,7 @@ function rightNoteClick(i, j) {
                     this.display();
                 }
             } else {
-                if (grid.neighbours[i].every((i) => this.cells[i].value !== j)) {
+                if (squares.neighbours[i].every((i) => this.cells[i].value !== j)) {
                     clickedCell.addNote(j);
                     this.display();
                 }

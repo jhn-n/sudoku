@@ -2,9 +2,9 @@ import "./style.css";
 
 import domMethods from "./game-dom";
 import userEventMethods from "./game-clicks";
-import autoupdateMethods from "./game-autoupdate";
+import autoupdateMethods from "./game-calcs.js";
 import controlMethods from "./game-control";
-import comb from "./comb-mod";
+import analysisMethods from "./game-analysis.js";
 
 const sudoku = {
     cells: Array(81),
@@ -16,6 +16,13 @@ const sudoku = {
     saved: [],
 };
 
-Object.assign(sudoku, domMethods, userEventMethods, autoupdateMethods, controlMethods);
+Object.assign(
+    sudoku,
+    domMethods,
+    userEventMethods,
+    autoupdateMethods,
+    controlMethods,
+    analysisMethods,
+);
 
 sudoku.start();

@@ -1,3 +1,5 @@
+import { hasBit, removeBit, addBit, countBits } from "./bitwise-mod";
+
 export class Cell {
     constructor() {
         this.value = null;
@@ -11,20 +13,25 @@ export class Cell {
     }
 
     hasNote(n) {
-        return this.notes & (1 << (n - 1));
+        return hasBit(this.notes, n);
     }
 
     removeNote(n) {
-        this.notes &= ~(1 << (n - 1));
+        this.notes = removeBit(this.notes, n);
     }
 
     addNote(n) {
-        this.notes |= 1 << (n - 1);
+        this.notes = addBit(this.notes, n);
     }
 
     reset() {
         this.value = null;
         this.notes = 511;
+    }
+
+    
+    get noteCount() {
+        return countBits(this.notes);
     }
 
     clone() {
@@ -33,15 +40,4 @@ export class Cell {
         newCell.notes = this.notes;
         return newCell;
     }
-    
-    get noteCount() {
-        let count = 0;
-        let x = this.notes;
-        while (x) {
-            count++;
-            x &= x - 1;
-        }
-        return count;
-    }
 }
-
