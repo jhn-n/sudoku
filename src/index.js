@@ -13,7 +13,8 @@ const sudoku = {
     buttonText: [],
     message: "",
     description: "",
-    saved: [],
+    move: null,
+    saved: null,
 };
 
 Object.assign(

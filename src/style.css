@@ -50,17 +50,22 @@ body {
     border-right: black 2px solid;
 }
 
-.value {
+
+.cell.value {
     font-size: var(--value-fontsize);
     display: grid;
     place-content: center;
 }
 
-.notes {
+.cell.notes {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     font-size: var(--note-fontsize);
+}
+
+.cell.move-line {
+    background: #C0C0C0;
 }
 
 .note {
@@ -80,6 +85,14 @@ body {
 
 .note.no:hover {
     opacity: 0.3;
+}
+
+.note.move-keynote {
+    color: blue;
+}
+
+.note.move-deadnote {
+    color: red;
 }
 
 .buttonContainer {

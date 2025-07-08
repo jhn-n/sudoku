@@ -12,14 +12,21 @@ function noteClick(i, j) {
             }
             break;
         case false:
-            if (clickedCell.hasNote(j) && this.validGame) {
-                clickedCell.setValue(j);
-                this.updateNotesForNewValue(i);
-                this.display();
+            if (clickedCell.hasNote(j)) {
+                if (clickedCell.noteCount > 1) {
+                    clickedCell.removeNote(j);
+                    this.displayRemoveNote(i, j);
+                } else if (this.validGame) {
+                    clickedCell.setValue(j);
+                    this.updateNotesForNewValue(i);
+                    this.move = null;
+                    this.buttonStatus("normal");
+                    this.display();
+                }
             } else {
                 if (squares.neighbours[i].every((i) => this.cells[i].value !== j)) {
                     clickedCell.addNote(j);
-                    this.display();
+                    this.displayAddNote(i, j);
                 }
             }
     }
@@ -29,13 +36,19 @@ function rightNoteClick(i, j) {
     const clickedCell = this.cells[i];
     switch (this.setupMode) {
         case true:
+            if (clickedCell.hasNote(j) && this.validGame) {
+                clickedCell.setValue(j);
+                this.recalculateNotesFromValues();
+                this.display();
+            }
             break;
         case false:
-            if (clickedCell.hasNote(j)) {
-                if (clickedCell.noteCount > 1) {
-                    clickedCell.removeNote(j);
-                    this.display();
-                }
+            if (clickedCell.hasNote(j) && this.validGame) {
+                clickedCell.setValue(j);
+                this.updateNotesForNewValue(i);
+                this.move = null;
+                this.buttonStatus("normal");
+                this.display();
             } else {
                 if (squares.neighbours[i].every((i) => this.cells[i].value !== j)) {
                     clickedCell.addNote(j);
@@ -52,10 +65,12 @@ function valueClick(i) {
             clickedCell.reset();
             this.recalculateNotesFromValues();
             this.display();
+            this.buttonStatus("setup");
             break;
         case false:
             this.undoValue(i);
             this.display();
+            this.buttonStatus("normal");
     }
 }
 
@@ -66,10 +81,12 @@ function rightValueClick(i) {
             clickedCell.reset();
             this.recalculateNotesFromValues();
             this.display();
+            this.buttonStatus("setup");
             break;
         case false:
             this.undoValue(i);
             this.display();
+            this.buttonStatus("normal");
     }
 }
 
@@ -81,6 +98,12 @@ function buttonClick(button) {
             break;
         case "done":
             this.finishedSetup();
+            break;
+        case "clue":
+            this.clue();
+            break;
+        case "remove":
+            this.removeClue();
             break;
     }
 }

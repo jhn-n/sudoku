@@ -7,11 +7,11 @@ export function hasBit(num, bit) {
 }
 
 export function removeBit(num, bit) {
-    return (num &= ~(1 << (bit - 1)));
+    return num & ~(1 << (bit - 1));
 }
 
 export function addBit(num, bit) {
-    return (num |= 1 << (bit - 1));
+    return num | (1 << (bit - 1));
 }
 
 export function countBits(num) {
