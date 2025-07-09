@@ -105,5 +105,8 @@ function buttonClick(button) {
         case "remove":
             this.removeClue();
             break;
+        case "start":
+            this.backToStart();
+            break;
     }
 }

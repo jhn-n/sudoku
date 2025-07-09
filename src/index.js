@@ -5,6 +5,7 @@ import userEventMethods from "./game-clicks";
 import autoupdateMethods from "./game-calcs.js";
 import controlMethods from "./game-control";
 import analysisMethods from "./game-analysis.js";
+import fileMethods from "./game-file.js";
 
 const sudoku = {
     cells: Array(81),
@@ -24,6 +25,7 @@ Object.assign(
     autoupdateMethods,
     controlMethods,
     analysisMethods,
+    fileMethods,
 );
 
 sudoku.start();

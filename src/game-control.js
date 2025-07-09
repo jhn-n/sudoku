@@ -1,7 +1,15 @@
 import { Cell } from "./cell-class";
 import squares from "./squares-mod";
 
-export default { start, reset, finishedSetup, clue, removeClue, buttonStatus };
+export default {
+    start,
+    reset,
+    finishedSetup,
+    clue,
+    removeClue,
+    buttonStatus,
+    backToStart,
+};
 
 function start() {
     this.reset();
@@ -32,11 +40,17 @@ function reset() {
 }
 
 function finishedSetup() {
+    this.saveStart();
     this.setupMode = false;
     this.message = "Get solving!";
     this.description = "";
     this.display();
     this.buttonStatus("normal");
+}
+
+function backToStart() {
+    this.loadStart();
+    this.finishedSetup();
 }
 
 function clue() {
@@ -73,7 +87,7 @@ function buttonStatus(code) {
             this.buttonText = ["done", "reset"];
             break;
         case "normal":
-            this.buttonText = ["clue", "reset"];
+            this.buttonText = ["clue", "start", "reset"];
             break;
         case "clue":
             this.buttonText = ["remove", "reset"];

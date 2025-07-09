@@ -51,7 +51,7 @@ function onlyValues(n) {
             }
         }
     }
-    console.timeEnd("onlyValues");
+    console.timeEnd(`onlyValues${n}`);
     movesFound.sort((a, b) => {
         return b.deadNotes.length - a.deadNotes.length;
     });

@@ -1,10 +1,8 @@
 export const bipartitions = [];
 
-console.time("biparts");
 for (let n = 0; n < 10; n++) {
     bipartitions.push(BipartitionsOfNaturalNumbers(n));
 }
-console.timeEnd("biparts");
 
 function BipartitionsOfNaturalNumbers(n) {
     const partitions = [...Array(10)].map(() => []);
@@ -24,9 +22,3 @@ function BipartitionsOfNaturalNumbers(n) {
     return partitions;
 }
 
-// function allNNCombsOfn(n) {
-//     for (let k = 0; k <= 9; k++) {
-//         console.log(bipartitions[n][k].length);
-//         console.log(bipartitions[n][k][0]);
-//     }
-// }
