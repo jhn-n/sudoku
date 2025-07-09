@@ -82,20 +82,20 @@ function onlyPlaces(n) {
                 continue;
             }
 
-            const deadNotes =
-                n === 1 ? [] : matchNotes(this.cells, subsetBSquares, subsetANotes);
+            // const deadNotes =
+            //     n === 1 ? [] : matchNotes(this.cells, subsetBSquares, subsetANotes);
 
             const newMove = new Move(
                 `Only ${n} Places`,
                 [line],
                 matchNotes(this.cells, subsetBSquares, not(subsetANotes)),
-                deadNotes,
+                matchNotes(this.cells, subsetBSquares, subsetANotes),
             );
             movesFound.push(newMove);
         }
     }
 
-    console.timeEnd("onlyPlaces");
+    console.timeEnd(`onlyPlaces${n}`);
     movesFound.sort((a, b) => {
         return b.deadNotes.length - a.deadNotes.length;
     });
@@ -119,11 +119,11 @@ function active(cells, squares) {
     return squares.filter((e) => cells[e].value === null);
 }
 
-function noteUnion(cells, squares) {
-    return squares.reduce((acc, i) => {
-        return acc | cells[i].notes;
-    }, cells[squares[0]].notes);
-}
+// function noteUnion(cells, squares) {
+//     return squares.reduce((acc, i) => {
+//         return acc | cells[i].notes;
+//     }, cells[squares[0]].notes);
+// }
 
 // eslint-disable-next-line no-unused-vars
 function noteIntersection(cells, squares) {
@@ -154,3 +154,8 @@ function noteIntersection(cells, squares) {
 // function onePositions(n) {
 //     return allNotes.filter((note) => ((1 << (note - 1)) & n) !== 0);
 // }
+
+
+function noteUnion(cells, squares) {
+    return squares.map(i => cells[i].notes).reduce((acc, curr) => acc | curr);
+}

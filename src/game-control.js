@@ -9,6 +9,7 @@ export default {
     removeClue,
     buttonStatus,
     backToStart,
+    undoMove,
 };
 
 function start() {
@@ -53,7 +54,13 @@ function backToStart() {
     this.finishedSetup();
 }
 
+function undoMove() {
+    this.loadGame();
+    this.display();
+}
+
 function clue() {
+    console.time("clue")
     let moves;
     for (let i = 1; i < 5; i++) {
         moves = this.onlyValues(i);
@@ -71,6 +78,7 @@ function clue() {
             break;
         }
     }
+    console.timeEnd("clue");
 }
 
 function removeClue() {
@@ -87,10 +95,10 @@ function buttonStatus(code) {
             this.buttonText = ["done", "reset"];
             break;
         case "normal":
-            this.buttonText = ["clue", "start", "reset"];
+            this.buttonText = ["clue", "start", "reset", "undo"];
             break;
         case "clue":
-            this.buttonText = ["remove", "reset"];
+            this.buttonText = ["remove"];
             break;
     }
     this.displayButtons();

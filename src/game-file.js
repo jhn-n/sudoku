@@ -1,4 +1,3 @@
-// import { Cell } from "./cell-class";
 import squares from "./squares-mod.js";
 
 export default { saveStart, loadStart, saveGame, loadGame };

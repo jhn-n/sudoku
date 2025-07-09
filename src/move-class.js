@@ -6,10 +6,12 @@ export class NoteLabel {
 }
 
 export class Move {
-    constructor( type, lines, keyNotes, deadNotes) {
+    constructor( type, lines, keyNotes, deadNotes, hint, description) {
         this.type = type;
         this.lines = lines;
         this.keyNotes = keyNotes;
         this.deadNotes = deadNotes;
+        this.hint = hint;
+        this.description = description;
     }
 }

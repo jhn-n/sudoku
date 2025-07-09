@@ -15,7 +15,6 @@ const sudoku = {
     message: "",
     description: "",
     move: null,
-    saved: null,
 };
 
 Object.assign(

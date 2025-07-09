@@ -62,7 +62,6 @@ function display() {
 }
 
 function displayMove(move) {
-    console.log("displayMove called");
     for (const line of move.lines) {
         for (const cell of line) {
             gridNode.children[cell].classList.add("move-line");
