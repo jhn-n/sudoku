@@ -1,9 +1,9 @@
-import { hasBit, removeBit, addBit, countBits } from "./bitwise-mod";
+import { hasBit, removeBit, addBit, countBits, not } from "./bitwise-mod";
 
 export class Cell {
     constructor() {
         this.value = null;
-        this.notes = 511;
+        this.notes = not(0);
     }
 
     setValue(n) {
@@ -26,7 +26,7 @@ export class Cell {
 
     reset() {
         this.value = null;
-        this.notes = 511;
+        this.notes = not(0);
     }
 
     

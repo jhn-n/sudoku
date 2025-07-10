@@ -15,3 +15,4 @@ export class Move {
         this.description = description;
     }
 }
+

@@ -41,12 +41,16 @@ function reset() {
 }
 
 function finishedSetup() {
-    this.saveStart();
-    this.setupMode = false;
-    this.message = "Get solving!";
-    this.description = "";
-    this.display();
-    this.buttonStatus("normal");
+    this.displayRemoveInvalid();
+    this.validGame = this.gameIsValid();
+    if (this.validGame) {
+        this.saveStart();
+        this.setupMode = false;
+        this.message = "Get solving!";
+        this.description = "";
+        this.display();
+        this.buttonStatus("normal");
+    }
 }
 
 function backToStart() {
@@ -60,7 +64,7 @@ function undoMove() {
 }
 
 function clue() {
-    console.time("clue")
+    console.time("clue");
     let moves;
     for (let i = 1; i < 5; i++) {
         moves = this.onlyValues(i);

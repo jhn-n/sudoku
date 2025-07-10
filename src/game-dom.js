@@ -8,19 +8,16 @@ export default {
     displayRemoveMove,
     displayAddNote,
     displayRemoveNote,
+    displayInvalid,
+    displayRemoveInvalid,
 };
 
 const gridNode = document.querySelector(".grid");
 const buttonsNode = document.querySelector(".buttonContainer");
-
-// const buttonNodes = [
-//     document.querySelector("#button1"),
-//     document.querySelector("#button2"),
-//     document.querySelector("#button3"),
-//     document.querySelector("#button4"),
-// ];
 const message = document.querySelector("#message");
 const description = document.querySelector("#description");
+
+let displayInvalidReport = null;
 
 function display() {
     gridNode.innerHTML = "";
@@ -59,6 +56,22 @@ function display() {
         this.displayButtons();
         this.displayText();
     });
+}
+
+function displayButtons() {
+    buttonsNode.innerHTML = "";
+    for (const buttonTxt of this.buttonText) {
+        const newButton = document.createElement("div");
+        newButton.classList.add("button");
+        newButton.innerText = buttonTxt;
+        newButton.addEventListener("click", () => this.buttonClick(buttonTxt));
+        buttonsNode.appendChild(newButton);
+    }
+}
+
+function displayText() {
+    message.innerText = this.message;
+    description.innerText = this.description;
 }
 
 function displayMove(move) {
@@ -101,24 +114,29 @@ function displayRemoveMove(move) {
     this.displayText();
 }
 
-function displayButtons() {
-    buttonsNode.innerHTML = "";
-    for (const buttonTxt of this.buttonText) {
-        const newButton = document.createElement("div");
-        newButton.classList.add("button");
-        newButton.innerText = buttonTxt;
-        newButton.addEventListener("click", () => this.buttonClick(buttonTxt));
-        buttonsNode.appendChild(newButton);
+function displayInvalid(report) {
+    if (report !== null) {
+        for (const cell of report.line) {
+            gridNode.children[cell].classList.add("invalid-line");
+        }
+        for (const cell of report.squares) {
+            gridNode.children[cell].classList.add("invalid-square");
+        }
+        displayInvalidReport = report;
+        console.log("Display", report, displayInvalidReport);
     }
 }
 
-function displayText() {
-    if (this.testValidGame()) {
-        message.innerText = this.message;
-        description.innerText = this.description;
-    } else {
-        message.innerText = "Invalid squares!";
-        description.innerText = "Restart or correct";
+function displayRemoveInvalid() {
+    if (displayInvalidReport !== null) {
+        console.log("Remove", displayInvalidReport);
+        for (const cell of displayInvalidReport.line) {
+            gridNode.children[cell].classList.remove("invalid-line");
+        }
+        for (const cell of displayInvalidReport.squares) {
+            gridNode.children[cell].classList.remove("invalid-square");
+        }
+        displayInvalidReport = null;
     }
 }
 
