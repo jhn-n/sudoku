@@ -70,14 +70,12 @@ function clue() {
         moves = this.onlyValues(i);
         if (moves.length > 0) {
             this.displayMove(moves[0]);
-            this.move = moves[0];
             this.buttonStatus("clue");
             break;
         }
         moves = this.onlyPlaces(i);
         if (moves.length > 0) {
             this.displayMove(moves[0]);
-            this.move = moves[0];
             this.buttonStatus("clue");
             break;
         }
@@ -86,11 +84,8 @@ function clue() {
 }
 
 function removeClue() {
-    if (this.move) {
-        this.displayRemoveMove(this.move);
-    }
+        this.displayRemoveMove();
     this.buttonStatus("normal");
-    this.move = null;
 }
 
 function buttonStatus(code) {

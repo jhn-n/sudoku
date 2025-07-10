@@ -4,9 +4,10 @@ import domMethods from "./game-dom";
 import userEventMethods from "./game-clicks";
 import autoupdateMethods from "./game-calcs.js";
 import controlMethods from "./game-control";
-import analysisMethods from "./game-analysis.js";
+import clueMethods from "./game-clues.js";
 import fileMethods from "./game-file.js";
 import validMethods from "./game-valid.js";
+import analysisMethods from "./game-analysis-tools.js";
 
 const sudoku = {
     cells: Array(81),
@@ -15,7 +16,6 @@ const sudoku = {
     buttonText: [],
     message: "",
     description: "",
-    move: null,
 };
 
 Object.assign(
@@ -24,9 +24,10 @@ Object.assign(
     userEventMethods,
     autoupdateMethods,
     controlMethods,
-    analysisMethods,
+    clueMethods,
     fileMethods,
     validMethods,
+    analysisMethods,
 );
 
 sudoku.start();

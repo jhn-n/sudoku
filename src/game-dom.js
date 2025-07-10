@@ -17,7 +17,8 @@ const buttonsNode = document.querySelector(".buttonContainer");
 const message = document.querySelector("#message");
 const description = document.querySelector("#description");
 
-let displayInvalidReport = null;
+let invalidDisplayed = null;
+let moveDisplayed = null;
 
 function display() {
     gridNode.innerHTML = "";
@@ -75,6 +76,9 @@ function displayText() {
 }
 
 function displayMove(move) {
+    if (move === null) {
+        return;
+    }
     for (const line of move.lines) {
         for (const cell of line) {
             gridNode.children[cell].classList.add("move-line");
@@ -89,54 +93,62 @@ function displayMove(move) {
         const cellNode = gridNode.children[deadNote.cell];
         cellNode.children[deadNote.note - 1].classList.add("move-deadnote");
     }
+    moveDisplayed = move;
+    console.log("Display move", move, moveDisplayed);
+
     this.displayButtons();
     this.displayText();
 }
 
-function displayRemoveMove(move) {
-    if (move !== null) {
-        for (const line of move.lines) {
-            for (const cell of line) {
-                gridNode.children[cell].classList.remove("move-line");
-            }
-        }
-        for (const keyNote of move.keyNotes) {
-            const cellNode = gridNode.children[keyNote.cell];
-            cellNode.children[keyNote.note - 1].classList.remove("move-keynote");
-        }
-
-        for (const deadNote of move.deadNotes) {
-            const cellNode = gridNode.children[deadNote.cell];
-            cellNode.children[deadNote.note - 1].classList.remove("move-deadnote");
+function displayRemoveMove() {
+    if (moveDisplayed === null) {
+        return;
+    }
+    for (const line of moveDisplayed.lines) {
+        for (const cell of line) {
+            gridNode.children[cell].classList.remove("move-line");
         }
     }
+    for (const keyNote of moveDisplayed.keyNotes) {
+        const cellNode = gridNode.children[keyNote.cell];
+        cellNode.children[keyNote.note - 1].classList.remove("move-keynote");
+    }
+
+    for (const deadNote of moveDisplayed.deadNotes) {
+        const cellNode = gridNode.children[deadNote.cell];
+        cellNode.children[deadNote.note - 1].classList.remove("move-deadnote");
+    }
+    console.log("Remove move", moveDisplayed);
+    moveDisplayed = null;
     this.displayButtons();
     this.displayText();
 }
 
 function displayInvalid(report) {
-    if (report !== null) {
-        for (const cell of report.line) {
-            gridNode.children[cell].classList.add("invalid-line");
-        }
-        for (const cell of report.squares) {
-            gridNode.children[cell].classList.add("invalid-square");
-        }
-        displayInvalidReport = report;
-        console.log("Display", report, displayInvalidReport);
+    if (report === null) {
+        return;
     }
+    for (const cell of report.line) {
+        gridNode.children[cell].classList.add("invalid-line");
+    }
+    for (const cell of report.squares) {
+        gridNode.children[cell].classList.add("invalid-square");
+    }
+    invalidDisplayed = report;
+    console.log("Display invalid", report, invalidDisplayed);
 }
 
 function displayRemoveInvalid() {
-    if (displayInvalidReport !== null) {
-        console.log("Remove", displayInvalidReport);
-        for (const cell of displayInvalidReport.line) {
+    if (invalidDisplayed !== null) {
+        console.log("Remove", invalidDisplayed);
+        for (const cell of invalidDisplayed.line) {
             gridNode.children[cell].classList.remove("invalid-line");
         }
-        for (const cell of displayInvalidReport.squares) {
+        for (const cell of invalidDisplayed.squares) {
             gridNode.children[cell].classList.remove("invalid-square");
         }
-        displayInvalidReport = null;
+        console.log("Remove invalid", invalidDisplayed);
+        invalidDisplayed = null;
     }
 }
 

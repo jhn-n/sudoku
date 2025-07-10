@@ -1,8 +1,7 @@
 import { bipartitions } from "./comb-mod.js";
-import { Move, NoteLabel } from "./move-class.js";
 import squares from "./squares-mod.js";
 // eslint-disable-next-line no-unused-vars
-import { nBit, countBits, not, union, onePositions } from "./bitwise-mod";
+import { nBit, countBits, not, onePositions } from "./bitwise-mod.js";
 
 export default { onlyValues, onlyPlaces };
 
@@ -19,7 +18,7 @@ function onlyValues(n) {
         }
     } else {
         for (const line of squares.lines) {
-            const activeSquares = active(this.cells, line);
+            const activeSquares = this.activeFilter(line);
             const len = activeSquares.length;
             // remove Math.floor?
             if (n > Math.floor(len / 2)) {
@@ -28,7 +27,7 @@ function onlyValues(n) {
             for (const subsets of bipartitions[len][n]) {
                 const subsetASquares = subsets[0].map((e) => activeSquares[e]);
                 const subsetBSquares = subsets[1].map((e) => activeSquares[e]);
-                const subsetANotes = noteUnion(this.cells, subsetASquares);
+                const subsetANotes = this.noteUnion(subsetASquares);
                 // if (countBits(subsetANotes) < n) {
                 //     console.log("Invalid: insufficient notes in squares", subsetASquares);
                 //     this.validGame = false;
@@ -38,7 +37,7 @@ function onlyValues(n) {
                     continue;
                 }
 
-                const subsetBNotes = noteUnion(this.cells, subsetBSquares);
+                const subsetBNotes = this.noteUnion(subsetBSquares);
                 if ((subsetBNotes & subsetANotes) === 0) {
                     continue;
                 }
@@ -67,7 +66,7 @@ function onlyPlaces(n) {
     console.time(`onlyPlaces${n}`);
     const movesFound = [];
     for (const line of squares.lines) {
-        const activeSquares = active(this.cells, line);
+        const activeSquares = this.activeFilter(line);
         const len = activeSquares.length;
         if (n > Math.floor((len - 1) / 2)) {
             continue;
@@ -75,11 +74,11 @@ function onlyPlaces(n) {
         for (const subsets of bipartitions[len][len - n]) {
             const subsetASquares = subsets[0].map((e) => activeSquares[e]);
             const subsetBSquares = subsets[1].map((e) => activeSquares[e]);
-            const subsetANotes = noteUnion(this.cells, subsetASquares);
+            const subsetANotes = this.noteUnion(subsetASquares);
             if (countBits(subsetANotes) > len - n) {
                 continue;
             }
-            const subsetBNotes = noteUnion(this.cells, subsetBSquares);
+            const subsetBNotes = this.noteUnion(subsetBSquares);
             if ((subsetBNotes & subsetANotes) === 0) {
                 continue;
             }
@@ -128,10 +127,22 @@ function matchNotes(cells, targetSquares, noteValues) {
 //     return matchedNotes;
 // }
 
-function active(cells, squares) {
-    return squares.filter((e) => cells[e].value === null);
+
+class NoteLabel {
+    constructor( cellNum, noteNum) {
+        this.cell = cellNum;
+        this.note = noteNum;
+    }
 }
 
-function noteUnion(cells, squares) {
-    return union(squares.map((i) => cells[i].notes));
+class Move {
+    constructor( type, lines, keyNotes, deadNotes, hint, description) {
+        this.type = type;
+        this.lines = lines;
+        this.keyNotes = keyNotes;
+        this.deadNotes = deadNotes;
+        this.hint = hint;
+        this.description = description;
+    }
 }
+

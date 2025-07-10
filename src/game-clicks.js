@@ -21,7 +21,6 @@ function noteClick(i, j) {
                     this.saveGame();
                     clickedCell.setValue(j);
                     this.updateNotesForNewValue(i);
-                    this.move = null;
                     this.buttonStatus("normal");
                     this.display();
                 }
@@ -50,7 +49,6 @@ function rightNoteClick(i, j) {
                 this.saveGame();
                 clickedCell.setValue(j);
                 this.updateNotesForNewValue(i);
-                this.move = null;
                 this.buttonStatus("normal");
                 this.display();
             } else if (squares.neighbours[i].every((i) => this.cells[i].value !== j)) {

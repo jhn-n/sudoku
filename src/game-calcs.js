@@ -25,17 +25,6 @@ function updateNotesForNewValue(i) {
     squares.neighbours[i].forEach((j) => this.cells[j].removeNote(this.cells[i].value));
 }
 
-// function testValidGame() {
-//     this.validGame = true;
-//     for (const i of squares.all) {
-//         if (this.cells[i].value === null && this.cells[i].noteCount === 0) {
-//             this.validGame = false;
-//             break;
-//         }
-//     }
-//     return this.validGame;
-// }
-
 function undoValue(i) {
     const clickedCell = this.cells[i];
     const valueToUndo = clickedCell.value;

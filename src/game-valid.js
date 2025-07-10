@@ -1,15 +1,14 @@
 import squares from "./squares-mod.js";
 import { bipartitions } from "./comb-mod.js";
-import { countBits, union} from "./bitwise-mod";
+import { countBits } from "./bitwise-mod";
 
 export default { gameIsValid, makeInvalidReport };
 
-let invalidReport = null;
 
 function gameIsValid() {
-    this.displayRemoveInvalid(invalidReport);
+    this.displayRemoveInvalid();
     console.time("Validity check");
-    this.makeInvalidReport();
+    const invalidReport = this.makeInvalidReport();
     console.timeEnd("Validity check");
     if (invalidReport === null) {
         return true;
@@ -20,43 +19,31 @@ function gameIsValid() {
 }
 
 function makeInvalidReport() {
-    for (const sq of active(this.cells, squares.all)) {
+    for (const sq of this.activeFilter(squares.all)) {
         if (this.cells[sq].notes === 0) {
-            invalidReport = new InvalidReport([sq], [sq]);
-            return;
+            return new InvalidReport([sq], [sq]);
         }
     }
 
-    for (const line of squares.lines) {
-        const activeSquares = active(this.cells, line);
-        const len = activeSquares.length;
-        for (let subsetSize = 2; subsetSize < len; subsetSize++) {
+    for (let subsetSize = 2; subsetSize < 9; subsetSize++) {
+        for (const line of squares.lines) {
+            const activeSquares = this.activeFilter(line);
+            const len = activeSquares.length;
             for (const subsets of bipartitions[len][subsetSize]) {
                 const subsetSquares = subsets[0].map((e) => activeSquares[e]);
-                const subsetNotes = noteUnion(this.cells, subsetSquares);
+                const subsetNotes = this.noteUnion(subsetSquares);
                 if (countBits(subsetNotes) < subsetSize) {
-                    invalidReport = new InvalidReport(line, subsetSquares);
-                    return;
+                    return new InvalidReport(line, subsetSquares);
                 }
             }
         }
     }
-    invalidReport = null;
+    return null;
 }
 
-function active(cells, squares) {
-    return squares.filter((e) => cells[e].value === null);
-}
-
-function noteUnion(cells, squares) {
-    return union(squares.map((i) => cells[i].notes));
-}
-
-export class InvalidReport {
-    constructor( line, squares) {
+class InvalidReport {
+    constructor(line, squares) {
         this.line = line;
         this.squares = squares;
     }
 }
-
-
