@@ -1,5 +1,5 @@
-import { Cell } from "./cell-class";
-import squares from "./squares-mod";
+import { Cell } from "./classes";
+import squares from "./mod-squares";
 
 export default {
     start,
@@ -65,26 +65,32 @@ function undoMove() {
 
 function clue() {
     console.time("clue");
-    let moves;
-    for (let i = 1; i < 5; i++) {
-        moves = this.onlyValues(i);
+    const strategies = [
+        () => this.onlyValues(1),
+        () => this.onlyPlaces(1),
+        () => this.onlyValues(2),
+        () => this.onlyPlaces(2),
+        () => this.onlyValues(3),
+        () => this.onlyPlaces(3),
+        () => this.onlyValues(4),
+        () => this.onlyPlaces(4),
+        () => this.findPointingTriples(),
+    ];
+
+    for (const strategy of strategies) {
+        const moves = strategy();
+
         if (moves.length > 0) {
-            this.displayMove(moves[0]);
-            this.buttonStatus("clue");
-            break;
-        }
-        moves = this.onlyPlaces(i);
-        if (moves.length > 0) {
+            console.timeEnd("clue");
             this.displayMove(moves[0]);
             this.buttonStatus("clue");
             break;
         }
     }
-    console.timeEnd("clue");
 }
 
 function removeClue() {
-        this.displayRemoveMove();
+    this.displayRemoveMove();
     this.buttonStatus("normal");
 }
 

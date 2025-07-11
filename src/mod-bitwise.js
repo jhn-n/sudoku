@@ -30,11 +30,11 @@ export function not(num) {
 }
 
 export function union(notes) {
-    return notes.reduce((acc, curr) => acc | curr);
+    return notes.reduce((acc, curr) => acc | curr, 0);
 }
 
 export function intersection(notes) {
-    return notes.reduce((acc, curr) => acc & curr);
+    return notes.reduce((acc, curr) => acc & curr, not(0));
 }
 
 export function onePositions(n) {

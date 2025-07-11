@@ -1,6 +1,7 @@
-import squares from "./squares-mod.js";
-import { bipartitions } from "./comb-mod.js";
-import { countBits } from "./bitwise-mod";
+import squares from "./mod-squares.js";
+import { bipartitions } from "./mod-comb.js";
+import { countBits } from "./mod-bitwise.js";
+import { InvalidReport } from "./classes.js";
 
 export default { gameIsValid, makeInvalidReport };
 
@@ -41,9 +42,4 @@ function makeInvalidReport() {
     return null;
 }
 
-class InvalidReport {
-    constructor(line, squares) {
-        this.line = line;
-        this.squares = squares;
-    }
-}
+

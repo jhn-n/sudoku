@@ -1,4 +1,4 @@
-import squares from "./squares-mod";
+import squares from "./mod-squares";
 
 export default {
     display,
@@ -94,7 +94,6 @@ function displayMove(move) {
         cellNode.children[deadNote.note - 1].classList.add("move-deadnote");
     }
     moveDisplayed = move;
-    console.log("Display move", move, moveDisplayed);
 
     this.displayButtons();
     this.displayText();
@@ -118,7 +117,6 @@ function displayRemoveMove() {
         const cellNode = gridNode.children[deadNote.cell];
         cellNode.children[deadNote.note - 1].classList.remove("move-deadnote");
     }
-    console.log("Remove move", moveDisplayed);
     moveDisplayed = null;
     this.displayButtons();
     this.displayText();

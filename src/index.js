@@ -1,13 +1,14 @@
 import "./style.css";
 
-import domMethods from "./game-dom";
-import userEventMethods from "./game-clicks";
-import autoupdateMethods from "./game-calcs.js";
-import controlMethods from "./game-control";
-import clueMethods from "./game-clues.js";
-import fileMethods from "./game-file.js";
-import validMethods from "./game-valid.js";
-import analysisMethods from "./game-analysis-tools.js";
+import domMethods from "./method-dom.js";
+import userEventMethods from "./method-click.js";
+import autoupdateMethods from "./method-click-calcs.js";
+import controlMethods from "./method-control.js";
+import clueToolsMethods from "./method-clue-tools.js";
+import clueMethods from "./method-clue.js";
+import clueMethods2 from "./method-clue2.js";
+import fileMethods from "./method-file.js";
+import validMethods from "./method-valid.js";
 
 const sudoku = {
     cells: Array(81),
@@ -24,10 +25,11 @@ Object.assign(
     userEventMethods,
     autoupdateMethods,
     controlMethods,
+    clueToolsMethods,
     clueMethods,
+    clueMethods2,
     fileMethods,
     validMethods,
-    analysisMethods,
 );
 
 sudoku.start();

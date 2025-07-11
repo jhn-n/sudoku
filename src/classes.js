@@ -1,4 +1,4 @@
-import { hasBit, removeBit, addBit, countBits, not } from "./bitwise-mod";
+import { hasBit, removeBit, addBit, countBits, not } from "./mod-bitwise";
 
 export class Cell {
     constructor() {
@@ -39,5 +39,30 @@ export class Cell {
         newCell.value = this.value;
         newCell.notes = this.notes;
         return newCell;
+    }
+}
+
+export class NoteLabel {
+    constructor( cellNum, noteNum) {
+        this.cell = cellNum;
+        this.note = noteNum;
+    }
+}
+
+export class Move {
+    constructor( type, lines, keyNotes, deadNotes, hint, description) {
+        this.type = type;
+        this.lines = lines;
+        this.keyNotes = keyNotes;
+        this.deadNotes = deadNotes;
+        this.hint = hint;
+        this.description = description;
+    }
+}
+
+export class InvalidReport {
+    constructor(line, squares) {
+        this.line = line;
+        this.squares = squares;
     }
 }

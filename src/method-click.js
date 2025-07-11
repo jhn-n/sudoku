@@ -1,4 +1,4 @@
-import squares from "./squares-mod";
+import squares from "./mod-squares";
 export default { noteClick, rightNoteClick, valueClick, rightValueClick, buttonClick };
 
 function noteClick(i, j) {

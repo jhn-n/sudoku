@@ -1,7 +1,7 @@
-import { bipartitions } from "./comb-mod.js";
-import squares from "./squares-mod.js";
-// eslint-disable-next-line no-unused-vars
-import { nBit, countBits, not, onePositions } from "./bitwise-mod.js";
+import { bipartitions } from "./mod-comb.js";
+import squares from "./mod-squares.js";
+import { countBits, not } from "./mod-bitwise.js";
+import { Move } from "./classes.js";
 
 export default { onlyValues, onlyPlaces };
 
@@ -45,8 +45,8 @@ function onlyValues(n) {
                 const newMove = new Move(
                     `Only ${n} Values`,
                     [line],
-                    matchNotes(this.cells, subsetASquares, subsetANotes),
-                    matchNotes(this.cells, subsetBSquares, subsetANotes),
+                    this.matchNotes(subsetASquares, subsetANotes),
+                    this.matchNotes(subsetBSquares, subsetANotes),
                 );
                 movesFound.push(newMove);
             }
@@ -89,8 +89,8 @@ function onlyPlaces(n) {
             const newMove = new Move(
                 `Only ${n} Places`,
                 [line],
-                matchNotes(this.cells, subsetBSquares, not(subsetANotes)),
-                matchNotes(this.cells, subsetBSquares, subsetANotes),
+                this.matchNotes(subsetBSquares, not(subsetANotes)),
+                this.matchNotes(subsetBSquares, subsetANotes),
             );
             movesFound.push(newMove);
         }
@@ -102,47 +102,3 @@ function onlyPlaces(n) {
     });
     return movesFound;
 }
-
-
-function matchNotes(cells, targetSquares, noteValues) {
-    const matchedNotes = [];
-    for (const sq of targetSquares) {
-        for (let n = 1; n < 10; n++) {
-            if (cells[sq].hasNote(n) && (nBit(n) & noteValues) !== 0) {
-                matchedNotes.push(new NoteLabel(sq, n));
-            }
-        }
-    }
-    return matchedNotes;
-}
-
-// try
-// function matchNotes(cells, targetSquares, noteValues) {
-//     const matchedNotes = [];
-//     for (const sq of targetSquares) {
-//         const hitNotes = cells[sq].notes & noteValues;
-//         const positions = onePositions(hitNotes);
-//         positions.forEach((j) => matchedNotes.push(new NoteLabel(sq, j)));
-//     }
-//     return matchedNotes;
-// }
-
-
-class NoteLabel {
-    constructor( cellNum, noteNum) {
-        this.cell = cellNum;
-        this.note = noteNum;
-    }
-}
-
-class Move {
-    constructor( type, lines, keyNotes, deadNotes, hint, description) {
-        this.type = type;
-        this.lines = lines;
-        this.keyNotes = keyNotes;
-        this.deadNotes = deadNotes;
-        this.hint = hint;
-        this.description = description;
-    }
-}
-
