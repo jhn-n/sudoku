@@ -1,3 +1,5 @@
+console.time("Squares setup")
+
 const all = [...Array(81).keys()];
 
 function rowOf(c) {
@@ -83,6 +85,7 @@ all.forEach((i) => {
 
 const lines = rows.concat(columns).concat(blocks);
 
+
 export default {
     rowOf,
     columnOf,
@@ -95,3 +98,5 @@ export default {
     lines,
     all,
 };
+
+console.timeEnd("Squares setup")

@@ -66,14 +66,14 @@ function undoMove() {
 function clue() {
     console.time("clue");
     const strategies = [
-        () => this.onlyValues(1),
-        () => this.onlyPlaces(1),
-        () => this.onlyValues(2),
-        () => this.onlyPlaces(2),
-        () => this.onlyValues(3),
-        () => this.onlyPlaces(3),
-        () => this.onlyValues(4),
-        () => this.onlyPlaces(4),
+        // () => this.onlyValues(1),
+        // () => this.onlyPlaces(1),
+        // () => this.onlyValues(2),
+        // () => this.onlyPlaces(2),
+        // () => this.onlyValues(3),
+        // () => this.onlyPlaces(3),
+        // () => this.onlyValues(4),
+        // () => this.onlyPlaces(4),
         () => this.findPointingTriples(),
     ];
 
