@@ -74,7 +74,9 @@ function clue() {
         // () => this.onlyPlaces(3),
         // () => this.onlyValues(4),
         // () => this.onlyPlaces(4),
-        () => this.findPointingTriples(),
+        // () => this.findPointingTriples(),
+        () => this.findXWings(2),
+        () => this.findXWings(3),
     ];
 
     for (const strategy of strategies) {
@@ -87,7 +89,6 @@ function clue() {
             break;
         }
     }
-    this.findXWings(2);
 }
 
 function removeClue() {

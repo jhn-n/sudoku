@@ -54,7 +54,7 @@ function findXWings(n) {
     console.time(`findXWings${n}`);
     const movesFound = [];
     for (let x = 1; x <= 9; x++) {
-        const rowBinaries = squares.rows.map((sqs) => this.squaresToNoteTrace(sqs, x));
+        const rowBinaries = squares.rows.map((row) => this.squaresToNoteTrace(row, x));
         const rowNoteCounts = rowBinaries.map((e) => countBits(e));
         const potentialRowIndices = Array.from(
             rowBinaries
@@ -80,10 +80,8 @@ function findXWings(n) {
             console.log("found an X Wing!");
 
             const targetColumnIndices = onePositionsFromZero(unionTargetRowsBinary);
-            // replace with couple of for loops?
-            let crossCells = [];
-            let sweepCells = [];
-            let lineCells = [];
+            const crossCells = [];
+            const sweepCells = [];
             for (const sq of squares.all) {
                 const sqRow = squares.rowOf(sq);
                 const sqColumn = squares.columnOf(sq);
@@ -95,10 +93,10 @@ function findXWings(n) {
                 if (inTargetColumn && !inTargetRows) {
                     sweepCells.push(sq);
                 }
-                if (inTargetColumn || inTargetRows) {
-                    lineCells.push(sq);
-                }
             }
+            const lineCells = targetRowIndices
+                .map((i) => squares.rows[i])
+                .concat(targetColumnIndices.map((i) => squares.columns[i]));
             console.log("target cells:", sweepCells);
             if ((this.noteUnion(sweepCells) & nBit(x)) === 0) {
                 console.log("But no notes to remove :(");
@@ -115,6 +113,8 @@ function findXWings(n) {
             movesFound.push(newMove);
         }
     }
+    // now do columns!!
+    
     console.timeEnd(`findXWings${n}`);
     movesFound.sort((a, b) => {
         return b.deadNotes.length - a.deadNotes.length;
