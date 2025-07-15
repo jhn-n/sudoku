@@ -26,6 +26,7 @@ function sameBlock(c1, c2) {
     return blockOf(c1) === blockOf(c2);
 }
 
+// rename as areNeighbours?
 function sameLine(c1, c2) {
     if (sameRow(c1, c2) || sameColumn(c1, c2) || sameBlock(c1, c2)) {
         return true;
@@ -82,6 +83,8 @@ all.forEach((i) => {
     });
     neighbours.push(currentNeighbours);
 });
+
+// add neighboursOfNeighbours?
 
 const lines = rows.concat(columns).concat(blocks);
 

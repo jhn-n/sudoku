@@ -53,59 +53,39 @@ function findPointingTriples() {
 function findXWings(n) {
     console.time(`findXWings${n}`);
     const movesFound = [];
+
+    // assume rows restricted first
     for (let x = 1; x <= 9; x++) {
         const rowBinaries = squares.rows.map((row) => this.squaresToNoteTrace(row, x));
         const rowNoteCounts = rowBinaries.map((e) => countBits(e));
-        const potentialRowIndices = Array.from(
-            rowBinaries
-                .keys()
-                .filter((i) => rowNoteCounts[i] <= n && rowNoteCounts[i] >= 2),
-        );
-        console.log(x, "potential rows:", potentialRowIndices);
+        const potentialRowIndices = rowBinaries
+            .keys()
+            .filter((i) => rowNoteCounts[i] <= n && rowNoteCounts[i] >= 2)
+            .toArray();
         const numPotentialRows = potentialRowIndices.length;
         if (numPotentialRows < n) {
             continue;
         }
         for (const comb of bipartitions[numPotentialRows][n]) {
             const targetRowIndices = comb[0].map((i) => potentialRowIndices[i]);
-            console.log("Analysing", targetRowIndices);
             const targetRowBinaries = targetRowIndices.map((i) => rowBinaries[i]);
-            console.log("With binaries", targetRowBinaries);
             const unionTargetRowsBinary = union(targetRowBinaries);
-            console.log("Union", unionTargetRowsBinary);
             if (countBits(unionTargetRowsBinary) !== n) {
-                console.log("No good!");
                 continue;
             }
-            console.log("found an X Wing!");
-
             const targetColumnIndices = onePositionsFromZero(unionTargetRowsBinary);
-            const crossCells = [];
-            const sweepCells = [];
-            for (const sq of squares.all) {
-                const sqRow = squares.rowOf(sq);
-                const sqColumn = squares.columnOf(sq);
-                const inTargetColumn = targetColumnIndices.includes(sqColumn);
-                const inTargetRows = targetRowIndices.includes(sqRow);
-                if (inTargetColumn && inTargetRows) {
-                    crossCells.push(sq);
-                }
-                if (inTargetColumn && !inTargetRows) {
-                    sweepCells.push(sq);
-                }
-            }
-            const lineCells = targetRowIndices
-                .map((i) => squares.rows[i])
-                .concat(targetColumnIndices.map((i) => squares.columns[i]));
-            console.log("target cells:", sweepCells);
+            const { crossCells, sweepCells, lines } = generateCellsForXWing(
+                targetRowIndices,
+                targetColumnIndices,
+                true
+            );
+
             if ((this.noteUnion(sweepCells) & nBit(x)) === 0) {
-                console.log("But no notes to remove :(");
                 continue;
             }
-            console.log("Yay");
             const newMove = new Move(
-                `X-Wing ${n}`,
-                lineCells,
+                `X-Wing rows ${n}`,
+                lines,
                 this.matchNotes(crossCells, nBit(x)),
                 this.matchNotes(sweepCells, nBit(x)),
             );
@@ -113,11 +93,72 @@ function findXWings(n) {
             movesFound.push(newMove);
         }
     }
+
     // now do columns!!
-    
+    for (let x = 1; x <= 9; x++) {
+        const colBinaries = squares.columns.map((col) => this.squaresToNoteTrace(col, x));
+        const colNoteCounts = colBinaries.map((e) => countBits(e));
+        const potentialColIndices = colBinaries
+            .keys()
+            .filter((i) => colNoteCounts[i] <= n && colNoteCounts[i] >= 2)
+            .toArray();
+        const numPotentialColumns = potentialColIndices.length;
+        if (numPotentialColumns < n) {
+            continue;
+        }
+        for (const comb of bipartitions[numPotentialColumns][n]) {
+            const targetColIndices = comb[0].map((i) => potentialColIndices[i]);
+            const targetColBinaries = targetColIndices.map((i) => colBinaries[i]);
+            const unionTargetColsBinary = union(targetColBinaries);
+            if (countBits(unionTargetColsBinary) !== n) {
+                continue;
+            }
+            const targetRowIndices = onePositionsFromZero(unionTargetColsBinary);
+            const { crossCells, sweepCells, lines } = generateCellsForXWing(
+                targetRowIndices,
+                targetColIndices,
+                false
+            );
+
+            if ((this.noteUnion(sweepCells) & nBit(x)) === 0) {
+                continue;
+            }
+            const newMove = new Move(
+                `X-Wing columns ${n}`,
+                lines,
+                this.matchNotes(crossCells, nBit(x)),
+                this.matchNotes(sweepCells, nBit(x)),
+            );
+            console.log(newMove);
+            movesFound.push(newMove);
+        }
+    }
+
     console.timeEnd(`findXWings${n}`);
     movesFound.sort((a, b) => {
         return b.deadNotes.length - a.deadNotes.length;
     });
     return movesFound;
+}
+
+function generateCellsForXWing(rowIndices, colIndices, isRowType) {
+    const crossCells = [];
+    const sweepCells = [];
+    for (const sq of squares.all) {
+        const sqRow = squares.rowOf(sq);
+        const sqColumn = squares.columnOf(sq);
+        const inTargetRows = rowIndices.includes(sqRow);
+        const inTargetColumn = colIndices.includes(sqColumn);
+        if (inTargetColumn && inTargetRows) {
+            crossCells.push(sq);
+        } else if (isRowType && !inTargetRows && inTargetColumn) {
+            sweepCells.push(sq);
+        } else if (!isRowType && inTargetRows && !inTargetColumn) {
+            sweepCells.push(sq);
+        }
+    }
+    const rowLines = rowIndices.map((i) => squares.rows[i]);
+    const colLines = colIndices.map((i) => squares.columns[i]);
+    const lines = rowLines.concat(colLines);
+    return { crossCells, sweepCells, lines };
 }
