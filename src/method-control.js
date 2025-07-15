@@ -87,6 +87,7 @@ function clue() {
             break;
         }
     }
+    this.findXWings(2);
 }
 
 function removeClue() {

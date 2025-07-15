@@ -59,33 +59,33 @@ for (let b = 0; b < 9; b++) {
     }
 }
 
-export const xWings = [[],[],xWingsGenerator(2), xWingsGenerator(3)];
-// xWings: [intersecting squares], [rest of rows], [rest of columns]
+// export const xWings = [[],[],xWingsGenerator(2), xWingsGenerator(3)];
+// // xWings: [intersecting squares], [rest of rows], [rest of columns]
 
-function xWingsGenerator(n) {
-    const xWingsN = []
-    for (const biRows of bipartitions[9][n]) {
-        for (const biCols of bipartitions[9][n]) {
-            const rows = biRows[0];
-            const columns = biCols[0];
-            const xWing = [[], [], []];
-            for (const sq of squares.all) {
-                const sqRow = squares.rowOf(sq);
-                const sqColumn = squares.columnOf(sq);
-                const inRows = rows.includes(sqRow);
-                const inColumns = columns.includes(sqColumn);
-                if (inRows && inColumns) {
-                    xWing[0].push(sq);
-                } else if (inRows) {
-                    xWing[1].push(sq);
-                } else if (inColumns) {
-                    xWing[2].push(sq);
-                }
-            }
-            xWingsN.push(xWing);
-        }
-    }
-    return xWingsN;
-}
+// function xWingsGenerator(n) {
+//     const xWingsN = []
+//     for (const biRows of bipartitions[9][n]) {
+//         for (const biCols of bipartitions[9][n]) {
+//             const rows = biRows[0];
+//             const columns = biCols[0];
+//             const xWing = [[], [], []];
+//             for (const sq of squares.all) {
+//                 const sqRow = squares.rowOf(sq);
+//                 const sqColumn = squares.columnOf(sq);
+//                 const inRows = rows.includes(sqRow);
+//                 const inColumns = columns.includes(sqColumn);
+//                 if (inRows && inColumns) {
+//                     xWing[0].push(sq);
+//                 } else if (inRows) {
+//                     xWing[1].push(sq);
+//                 } else if (inColumns) {
+//                     xWing[2].push(sq);
+//                 }
+//             }
+//             xWingsN.push(xWing);
+//         }
+//     }
+//     return xWingsN;
+// }
 
 console.timeEnd("Combs setup");

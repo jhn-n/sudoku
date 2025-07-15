@@ -39,7 +39,7 @@ function undoValue(i) {
                 if (this.cells[k].value === valueToUndo) {
                     neighbour.removeNote(valueToUndo);
                     break;
-                } 
+                }
             }
         }
     });
