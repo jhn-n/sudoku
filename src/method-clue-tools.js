@@ -1,8 +1,8 @@
-import { union } from "./mod-bitwise";
+import { union, intersection } from "./mod-bitwise";
 import { NoteLabel } from "./classes";
 import { nBit } from "./mod-bitwise";
 
-export default { activeFilter, noteUnion, matchNotes, squaresToNoteTrace };
+export default { activeFilter, noteUnion, noteIntersection, matchNotes, squaresToNoteTrace };
 
 function activeFilter(squares) {
     return squares.filter((e) => this.cells[e].value === null);
@@ -10,6 +10,10 @@ function activeFilter(squares) {
 
 function noteUnion(squares) {
     return union(squares.map((i) => this.cells[i].notes));
+}
+
+function noteIntersection(squares) {
+    return intersection(squares.map((i) => this.cells[i].notes));
 }
 
 // returns a list of NoteLabels for each note in targetSquares that

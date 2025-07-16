@@ -4,7 +4,7 @@ import { bipartitions } from "./mod-comb.js";
 import { countBits, nBit, not, onePositionsFromZero, union } from "./mod-bitwise.js";
 import { Move } from "./classes.js";
 
-export default { findPointingTriples, findXWings };
+export default { findPointingTriples, findXWings, findYWings };
 
 function findPointingTriples() {
     console.time("findPointingTriples");
@@ -69,15 +69,14 @@ function findXWings(n) {
         for (const comb of bipartitions[numPotentialRows][n]) {
             const targetRowIndices = comb[0].map((i) => potentialRowIndices[i]);
             const targetRowBinaries = targetRowIndices.map((i) => rowBinaries[i]);
-            const unionTargetRowsBinary = union(targetRowBinaries);
-            if (countBits(unionTargetRowsBinary) !== n) {
+            if (countBits(union(targetRowBinaries)) !== n) {
                 continue;
             }
             const targetColumnIndices = onePositionsFromZero(unionTargetRowsBinary);
             const { crossCells, sweepCells, lines } = generateCellsForXWing(
                 targetRowIndices,
                 targetColumnIndices,
-                true
+                true,
             );
 
             if ((this.noteUnion(sweepCells) & nBit(x)) === 0) {
@@ -117,7 +116,7 @@ function findXWings(n) {
             const { crossCells, sweepCells, lines } = generateCellsForXWing(
                 targetRowIndices,
                 targetColIndices,
-                false
+                false,
             );
 
             if ((this.noteUnion(sweepCells) & nBit(x)) === 0) {
@@ -161,4 +160,52 @@ function generateCellsForXWing(rowIndices, colIndices, isRowType) {
     const colLines = colIndices.map((i) => squares.columns[i]);
     const lines = rowLines.concat(colLines);
     return { crossCells, sweepCells, lines };
+}
+
+function findYWings() {
+    console.time("findYWings");
+    const movesFound = [];
+
+    const squaresWithTwoNotes = squares.all.filter(
+        (sq) => countBits(this.cells[sq].notes) === 2,
+    );
+    for (const pivot of squaresWithTwoNotes) {
+        const potentialPincers = squaresWithTwoNotes
+            .filter((sq) => squares.areNeighbours(pivot, sq))
+            .filter((sq) => countBits(this.noteIntersection([pivot, sq])) === 1);
+        const numPotentials = potentialPincers.length;
+        if (numPotentials < 2) {
+            continue;
+        }
+        for (const comb of bipartitions[numPotentials][2]) {
+            const pincers = comb[0].map((i) => potentialPincers[i]);
+            const pincersIntersection = this.noteIntersection(pincers);
+            if (
+                this.noteIntersection([pivot, pincers[0], pincers[1]]) !== 0 ||
+                pincersIntersection === 0
+            ) {
+                continue;
+            }
+            const targets = squares.all
+                .filter((sq) => squares.areNeighbours(sq, pincers[0]))
+                .filter((sq) => squares.areNeighbours(sq, pincers[1]))
+                .filter((sq) => (this.cells[sq].notes & pincersIntersection) !== 0);
+            if (targets.length === 0) {
+                continue;
+            }
+            const newMove = new Move(
+                `Y-Wing`,
+                [pincers, targets, [pivot]],
+                this.matchNotes([pincers, pivot[0], pivot[1]], not(0)),
+                this.matchNotes(targets, pincersIntersection),
+            );
+            console.log(newMove);
+            movesFound.push(newMove);
+        }
+    }
+    console.timeEnd("findYWings");
+    movesFound.sort((a, b) => {
+        return b.deadNotes.length - a.deadNotes.length;
+    });
+    return movesFound;
 }

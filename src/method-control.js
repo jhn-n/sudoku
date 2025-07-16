@@ -66,19 +66,20 @@ function undoMove() {
 function clue() {
     console.time("clue");
     const strategies = [
-        () => this.onlyValues(1),
-        () => this.onlyPlaces(1),
-        () => this.onlyValues(2),
-        () => this.onlyPlaces(2),
-        () => this.onlyValues(3),
-        () => this.onlyPlaces(3),
-        () => this.onlyValues(4),
-        () => this.onlyPlaces(4),
-        () => this.findPointingTriples(),
-        () => this.findXWings(2),
-        () => this.findXWings(3),
-        () => this.findXWings(4),
-        () => this.findXWings(5),
+        // () => this.onlyValues(1),
+        // () => this.onlyPlaces(1),
+        // () => this.onlyValues(2),
+        // () => this.onlyPlaces(2),
+        // () => this.onlyValues(3),
+        // () => this.onlyPlaces(3),
+        // () => this.onlyValues(4),
+        // () => this.onlyPlaces(4),
+        // () => this.findPointingTriples(),
+        // () => this.findXWings(2),
+        // () => this.findXWings(3),
+        // () => this.findXWings(4),
+        // () => this.findXWings(5),
+        () => this.findYWings(),
     ];
 
     for (const strategy of strategies) {

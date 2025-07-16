@@ -27,7 +27,7 @@ function sameBlock(c1, c2) {
 }
 
 // rename as areNeighbours?
-function sameLine(c1, c2) {
+function areNeighbours(c1, c2) {
     if (sameRow(c1, c2) || sameColumn(c1, c2) || sameBlock(c1, c2)) {
         return true;
     }
@@ -77,7 +77,7 @@ const neighbours = [];
 all.forEach((i) => {
     const currentNeighbours = [];
     all.forEach((j) => {
-        if (j !== i && sameLine(i, j)) {
+        if (j !== i && areNeighbours(i, j)) {
             currentNeighbours.push(j);
         }
     });
@@ -93,7 +93,7 @@ export default {
     rowOf,
     columnOf,
     blockOf,
-    sameLine,
+    areNeighbours,
     neighbours,
     rows,
     columns,
