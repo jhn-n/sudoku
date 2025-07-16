@@ -69,7 +69,8 @@ function findXWings(n) {
         for (const comb of bipartitions[numPotentialRows][n]) {
             const targetRowIndices = comb[0].map((i) => potentialRowIndices[i]);
             const targetRowBinaries = targetRowIndices.map((i) => rowBinaries[i]);
-            if (countBits(union(targetRowBinaries)) !== n) {
+            const unionTargetRowsBinary = union(targetRowBinaries);
+            if (countBits(unionTargetRowsBinary !== n)) {
                 continue;
             }
             const targetColumnIndices = onePositionsFromZero(unionTargetRowsBinary);
@@ -177,6 +178,7 @@ function findYWings() {
         if (numPotentials < 2) {
             continue;
         }
+        console.log(pivot, potentialPincers);
         for (const comb of bipartitions[numPotentials][2]) {
             const pincers = comb[0].map((i) => potentialPincers[i]);
             const pincersIntersection = this.noteIntersection(pincers);
