@@ -1,10 +1,10 @@
-import squares from "./mod-squares.js";
+console.time("Cmb setup");
 
-console.time("Combs setup");
+import { sqs } from "./mod-sqs.js";
 
-export const bipartitions = [];
+const bipartitionsNN = [];
 for (let n = 0; n < 10; n++) {
-    bipartitions.push(BipartitionsOfNaturalNumbers(n));
+    bipartitionsNN.push(BipartitionsOfNaturalNumbers(n));
 }
 
 function BipartitionsOfNaturalNumbers(n) {
@@ -25,17 +25,26 @@ function BipartitionsOfNaturalNumbers(n) {
     return partitions;
 }
 
-// one module per technique?
-export const pointingTriples = [];
+function bipartitions(set, k) {
+    const ans = [];
+    for (const comb of bipartitionsNN[set.length][k]) {
+        const subset = comb[0].map((e) => set[e]);
+        const subsetComp = comb[1].map((e) => set[e]);
+        ans.push([subset, subsetComp]);
+    }
+    return ans;
+}
+
 // triple: [block&line], [block only], [line only]
+const pointingTriples = [];
 for (let b = 0; b < 9; b++) {
     for (let l = 0; l < 9; l++) {
         const tripleRow = [[], [], []];
         const tripleColumn = [[], [], []];
         for (let sq = 0; sq < 81; sq++) {
-            const sqRow = squares.rowOf(sq);
-            const sqColumn = squares.columnOf(sq);
-            const sqBlock = squares.blockOf(sq);
+            const sqRow = sqs.rowOf(sq);
+            const sqColumn = sqs.columnOf(sq);
+            const sqBlock = sqs.blockOf(sq);
             if (sqBlock === b && sqRow === l) {
                 tripleRow[0].push(sq);
             } else if (sqBlock === b) {
@@ -60,5 +69,6 @@ for (let b = 0; b < 9; b++) {
     }
 }
 
+export const cmb = { bipartitions, bipartitionsNN, pointingTriples };
 
-console.timeEnd("Combs setup");
+console.timeEnd("Cmb setup");

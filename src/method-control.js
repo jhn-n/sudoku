@@ -1,5 +1,5 @@
-import { Cell } from "./classes";
-import squares from "./mod-squares";
+import { Cell } from "./class-Cell";
+import squares from "./mod-sqs";
 
 export default {
     start,

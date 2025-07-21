@@ -1,4 +1,4 @@
-import squares from "./mod-squares.js";
+import squares from "./mod-sqs.js";
 export default {
     recalculateNotesFromValues,
     updateNotesForNewValue,

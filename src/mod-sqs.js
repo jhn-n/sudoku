@@ -1,4 +1,4 @@
-console.time("Squares setup")
+console.time("Sqs setup")
 
 const all = [...Array(81).keys()];
 
@@ -26,7 +26,6 @@ function sameBlock(c1, c2) {
     return blockOf(c1) === blockOf(c2);
 }
 
-// rename as areNeighbours?
 function areNeighbours(c1, c2) {
     if (sameRow(c1, c2) || sameColumn(c1, c2) || sameBlock(c1, c2)) {
         return true;
@@ -56,6 +55,13 @@ for (let c = 0; c < 9; c++) {
     columns.push(currentLine);
 }
 
+const blocks = [];
+for (let r = 0; r < 9; r += 3) {
+    for (let c = 0; c < 9; c += 3) {
+        blocks.push(createBlockArray(r, c));
+    }
+}
+
 function createBlockArray(startRow, startColumn) {
     const block = [];
     for (let i = 0; i < 3; i++) {
@@ -66,12 +72,7 @@ function createBlockArray(startRow, startColumn) {
     return block;
 }
 
-const blocks = [];
-for (let r = 0; r < 9; r += 3) {
-    for (let c = 0; c < 9; c += 3) {
-        blocks.push(createBlockArray(r, c));
-    }
-}
+const blocksAndLines = rows.concat(columns).concat(blocks);
 
 const neighbours = [];
 all.forEach((i) => {
@@ -86,10 +87,7 @@ all.forEach((i) => {
 
 // add neighboursOfNeighbours?
 
-const lines = rows.concat(columns).concat(blocks);
-
-
-export default {
+export const sqs = {
     rowOf,
     columnOf,
     blockOf,
@@ -98,8 +96,8 @@ export default {
     rows,
     columns,
     blocks,
-    lines,
+    blocksAndLines,
     all,
 };
 
-console.timeEnd("Squares setup")
+console.timeEnd("Sqs setup")
