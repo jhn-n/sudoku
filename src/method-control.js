@@ -79,10 +79,6 @@ function clue() {
         () => this.findXWings(2),
         () => this.findXWings(3),
         () => this.findXWings(4),
-        () => this.findXWings(5),
-        () => this.findXWings(6),
-        () => this.findXWings(7),
-        () => this.findXWings(8),
     ];
 
     for (const strategy of strategies) {
