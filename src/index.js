@@ -3,12 +3,16 @@
 import {sqs} from "./mod-sqs.js";
 import {cmb} from "./mod-cmb.js";
 import {bit} from "./mod-bit.js";
+import {file} from "./mod-file.js";
+import {dom} from "./mod-dom.js";
+import { val } from "./mod-val.js";
 import { Board } from "./class-Board.js";
 
 // const a = ["apple", "banana", "cherry", "damson", "eldeberry"]
 // console.log(cmb.bipartitions(a,2));
 
 const b = new Board();
+
 
 
 // import domMethods from "./method-dom.js";

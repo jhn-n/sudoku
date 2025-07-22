@@ -1,5 +1,4 @@
-import squares from "./mod-squares";
-export default { noteClick, rightNoteClick, valueClick, rightValueClick, buttonClick };
+import {sqs} from "./mod-sqs.js";
 
 function noteClick(i, j) {
     const clickedCell = this.cells[i];
@@ -115,3 +114,5 @@ function buttonClick(button) {
             this.undoMove();
     }
 }
+
+export const tri = { noteClick, rightNoteClick, valueClick, rightValueClick, buttonClick };

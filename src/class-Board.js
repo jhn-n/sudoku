@@ -8,6 +8,13 @@ class Cell {
     }
 }
 
+class NoteLabel {
+    constructor( cellNum, noteNum) {
+        this.cell = cellNum;
+        this.note = noteNum;
+    }
+}
+
 export class Board {
     #cells;
 
@@ -16,34 +23,12 @@ export class Board {
         sqs.all.forEach((i) => (this.#cells[i] = new Cell()));
     }
 
-    setValueOnly(sq, newValue) {
-        this.#cells[sq].value = newValue;
-    }
-
-    getValue(sq) {
-        return this.#cells[sq].value;
-    }
-
     setNotesOnly(sq, newNotes) {
         this.#cells[sq].notes = newNotes;
     }
 
     getNotes(sq) {
         return this.#cells[sq].notes;
-    }
-
-    setValue(sq, value) {
-        this.setValueOnly(sq, value);
-        this.setNotesOnly(sq, 0);
-    }
-
-    undoValue(sq) {
-        this.setValueOnly(sq, null);
-        this.setNotesOnly(sq, bit.allNotes);
-    }
-
-    reset() {
-        sqs.all.forEach((i) => this.undoValue(i));
     }
 
     addNote(sq, n) {
@@ -62,6 +47,47 @@ export class Board {
         return bit.count(this.getNotes(sq));
     }
 
+    resetNotes(sq) {
+        this.setNotesOnly(sq, bit.allNotes);
+    }
+
+    setValueOnly(sq, newValue) {
+        this.#cells[sq].value = newValue;
+    }
+
+    getValue(sq) {
+        return this.#cells[sq].value;
+    }
+
+    hasValue(sq) {
+        return this.getValue(sq) !== null;
+    }
+
+    hasNoValue(sq) {
+        return !this.hasValue(sq);
+    }
+
+    resetCell(sq) {
+        this.setValueOnly(sq, null);
+        this.resetNotes(sq);
+    }
+
+    setValue(sq, value) {
+        this.setValueOnly(sq, value);
+        this.setNotesOnly(sq, 0);
+        this.updateNotesAfterSetValue(sq, value);
+    }
+    
+    undoValue(sq) {
+        const value = this.getValue(sq);
+        this.resetCell(sq);
+        this.updateNotesAfterUndoValue(sq, value);
+    }
+
+    resetAll() {
+        sqs.all.forEach((i) => this.resetCell(i));
+    }
+
     clone() {
         const boardClone = new Board();
         for (const i of sqs.all) {
@@ -78,17 +104,48 @@ export class Board {
         }
     }
 
+
+    noteUnion(squares) {
+        return bit.union(squares.map((i) => this.getNotes(i)));
+    }
+
+    noteIntersection(squares) {
+        return bit.intersection(squares.map((i) => this.getNotes(i)));
+    }
+
+    updateNotesAfterSetValue(sq, value) {
+        sqs.neighbours[sq].forEach((i) => this.removeNote(i, value));
+    }
+
+    updateNotesAfterUndoValue(sq, undoValue) {
+        for (const i of sqs.neighbours[sq]) {
+            if (this.hasValue(i)) {
+                this.removeNote(sq, this.getValue(i));
+            } else {
+                this.addNote(i, undoValue);
+                for (const j of sqs.neighbours[i]) {
+                    if (this.getValue(j) === undoValue) {
+                        this.removeNote(i, undoValue);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     recalculateAllNotes() {
-        for (const i of sqs.all) {
-            if (this.getValue(i) === null) {
-                this.setNotesOnly(i, bit.allNotes);
+        sqs.all.filter(this.hasNoValue).forEach((i) => this.resetNotes(i));
+        const valueSquares = sqs.all.filter(this.hasValue);
+        valueSquares.forEach((i) => this.updateNotesAfterSetValue(i, this.getValue(i)));
+    }
+
+    createNoteLabels(targetSqs, notesToMatch) {
+        const noteLabels = [];
+            for (const sq of targetSqs) {
+                const hitNotes = this.getNotes(sq) & notesToMatch;
+                const positions = bit.onePositionsNotes(hitNotes);
+                positions.forEach((j) => noteLabels.push(new NoteLabel(sq, j)));
             }
-        }
-        const valueSquares = sqs.all.filter((i) => this.getValue(i) !== null);
-        for (const i of valueSquares) {
-            for (const j of sqs.neighbours[i]) {
-                this.removeNote(j, this.getValue(i));
-            }
-        }
+            return noteLabels;
     }
 }
