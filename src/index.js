@@ -1,17 +1,10 @@
-// import "./style.css";
+import "./style.css";
 
-import {sqs} from "./mod-sqs.js";
-import {cmb} from "./mod-cmb.js";
-import {bit} from "./mod-bit.js";
-import {file} from "./mod-file.js";
-import {dom} from "./mod-dom.js";
-import { val } from "./mod-val.js";
-import { Board } from "./class-Board.js";
+import { start } from "./states.js";
+start();
 
 // const a = ["apple", "banana", "cherry", "damson", "eldeberry"]
 // console.log(cmb.bipartitions(a,2));
-
-const b = new Board();
 
 
 

@@ -1,15 +1,15 @@
 import { sqs } from "./mod-sqs.js";
-import { tri } from "./method-click-triage.js";
+import { getState } from "./states.js";
 
 const gridNode = document.querySelector(".grid");
 const buttonsNode = document.querySelector(".buttonContainer");
-const message = document.querySelector("#message");
-const description = document.querySelector("#description");
+const messageNode = document.querySelector("#message");
+const descriptionNode = document.querySelector("#description");
 
 let invalidDisplayed = null;
 let moveDisplayed = null;
 
-function displayGrid(board) {
+function displayBoard(board) {
     gridNode.innerHTML = "";
 
     for (const i of sqs.all) {
@@ -21,10 +21,14 @@ function displayGrid(board) {
         if (board.hasValue(i)) {
             newCell.classList.add("value");
             newCell.innerText = board.getValue(i);
-            newCell.addEventListener("click", () => tri.valueClick(i));
+            newCell.addEventListener("click", () => {
+                const state = getState();
+                state.valueClick(i);
+            });
             newCell.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
-                tri.rightValueClick(i);
+                const state = getState();
+                state.valueClickRight(i);
             });
         } else {
             newCell.classList.add("notes");
@@ -34,10 +38,22 @@ function displayGrid(board) {
                 newNote.innerText = j;
                 const indicator = board.hasNote(i, j) ? "yes" : "no";
                 newNote.classList.add(indicator);
-                newNote.addEventListener("click", () => tri.noteClick(i, j));
+                newNote.addEventListener("click", () => {
+                    const state = getState();
+                    if (board.hasNote(i, j)) {
+                        state.presentNoteClick(i, j);
+                    } else {
+                        state.missingNoteClick(i, j);
+                    }
+                });
                 newNote.addEventListener("contextmenu", (e) => {
                     e.preventDefault();
-                    tri.rightNoteClick(i, j);
+                    const state = getState();
+                    if (board.hasNote(i, j)) {
+                        state.presentNoteClickRight(i, j);
+                    } else {
+                        state.missingNoteClickRight(i, j);
+                    }
                 });
                 newCell.appendChild(newNote);
             }
@@ -52,17 +68,20 @@ function displayButtons(buttonTexts) {
         const newButton = document.createElement("div");
         newButton.classList.add("button");
         newButton.innerText = button;
-        newButton.addEventListener("click", () => this.buttonClick(button));
+        newButton.addEventListener("click", () => {
+            const state = getState();
+            state.buttonClick(button);
+        });
         buttonsNode.appendChild(newButton);
     }
 }
 
-function displayMessage() {
-    message.innerText = this.message;
+function displayMessage(message) {
+    messageNode.innerText = message;
 }
 
-function displayDescription() {
-    description.innerText = this.description;
+function displayDescription(description) {
+    descriptionNode.innerText = description;
 }
 
 function displayMove(move) {
@@ -141,7 +160,7 @@ function displayRemoveNote(i, j) {
 }
 
 export const dom = {
-    displayGrid,
+    displayBoard,
     displayButtons,
     displayMessage,
     displayDescription,

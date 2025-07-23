@@ -9,7 +9,7 @@ class Cell {
 }
 
 class NoteLabel {
-    constructor( cellNum, noteNum) {
+    constructor(cellNum, noteNum) {
         this.cell = cellNum;
         this.note = noteNum;
     }
@@ -77,7 +77,7 @@ export class Board {
         this.setNotesOnly(sq, 0);
         this.updateNotesAfterSetValue(sq, value);
     }
-    
+
     undoValue(sq) {
         const value = this.getValue(sq);
         this.resetCell(sq);
@@ -104,7 +104,6 @@ export class Board {
         }
     }
 
-
     noteUnion(squares) {
         return bit.union(squares.map((i) => this.getNotes(i)));
     }
@@ -122,13 +121,16 @@ export class Board {
             if (this.hasValue(i)) {
                 this.removeNote(sq, this.getValue(i));
             } else {
-                this.addNote(i, undoValue);
-                for (const j of sqs.neighbours[i]) {
-                    if (this.getValue(j) === undoValue) {
-                        this.removeNote(i, undoValue);
-                        break;
-                    }
+                if (sqs.neighbours[i].every((j) => this.getValue(j) !== undoValue)) {
+                    this.addNote(i, undoValue);
                 }
+                // this.addNote(i, undoValue);
+                // for (const j of sqs.neighbours[i]) {
+                //     if (this.getValue(j) === undoValue) {
+                //         this.removeNote(i, undoValue);
+                //         break;
+                //     }
+                // }
             }
         }
     }
@@ -141,11 +143,11 @@ export class Board {
 
     createNoteLabels(targetSqs, notesToMatch) {
         const noteLabels = [];
-            for (const sq of targetSqs) {
-                const hitNotes = this.getNotes(sq) & notesToMatch;
-                const positions = bit.onePositionsNotes(hitNotes);
-                positions.forEach((j) => noteLabels.push(new NoteLabel(sq, j)));
-            }
-            return noteLabels;
+        for (const sq of targetSqs) {
+            const hitNotes = this.getNotes(sq) & notesToMatch;
+            const positions = bit.onePositionsNotes(hitNotes);
+            positions.forEach((j) => noteLabels.push(new NoteLabel(sq, j)));
+        }
+        return noteLabels;
     }
 }

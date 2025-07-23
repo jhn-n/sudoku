@@ -9,22 +9,9 @@ class InvalidReport {
     }
 }
 
-// function gameIsValid() {
-//     this.displayRemoveInvalid();
-//     console.time("Validity check");
-//     const invalidReport = this.makeInvalidReport();
-//     console.timeEnd("Validity check");
-//     if (invalidReport === null) {
-//         return true;
-//     }
-//     console.log(invalidReport);
-//     this.displayInvalid(invalidReport);
-//     return false;
-// }
-
 function findInvalidSubset(board) {
     console.time("findInvalidSubset");
-    for (const sq of sqs.all.filter(board.hasNoValue)) {
+    for (const sq of sqs.all.filter((sq) => board.hasNoValue(sq))) {
         if (board.getNotes(sq) === 0) {
             return new InvalidReport([], [sq]);
         }
@@ -32,11 +19,11 @@ function findInvalidSubset(board) {
 
     for (let subsetSize = 2; subsetSize < 9; subsetSize++) {
         for (const line of sqs.blocksAndLines) {
-            const activeSquares = line.filter(board.hasNoValue);
+            const activeSquares = line.filter((sq) => board.hasNoValue(sq));
             for (const subsets of cmb.bipartitions(activeSquares, subsetSize)) {
                 const subsetSquares = subsets[0];
                 const subsetNotes = board.noteUnion(subsetSquares);
-                if (bit.countBits(subsetNotes) < subsetSize) {
+                if (bit.count(subsetNotes) < subsetSize) {
                     console.timeEnd("findInvalidSubset");
                     return new InvalidReport(line, subsetSquares);
                 }
@@ -47,4 +34,4 @@ function findInvalidSubset(board) {
     return null;
 }
 
-export const val = { findInvalidSubset };
+export const vld = { findInvalidSubset };
