@@ -53,3 +53,33 @@ for (let b = 0; b < 9; b++) {
         }
     }
 }
+
+function clue() {
+    console.time("clue");
+    const strategies = [
+        () => this.findYWings(),
+        () => this.onlyValues(1),
+        () => this.onlyPlaces(1),
+        () => this.onlyValues(2),
+        () => this.onlyPlaces(2),
+        () => this.onlyValues(3),
+        () => this.onlyPlaces(3),
+        () => this.onlyValues(4),
+        () => this.onlyPlaces(4),
+        () => this.findPointingTriples(),
+        () => this.findXWings(2),
+        () => this.findXWings(3),
+        () => this.findXWings(4),
+    ];
+
+    for (const strategy of strategies) {
+        const moves = strategy();
+
+        if (moves.length > 0) {
+            this.displayMove(moves[0]);
+            this.buttonStatus("clue");
+            break;
+        }
+    }
+    console.timeEnd("clue");
+}

@@ -1,5 +1,5 @@
 import { sqs } from "./mod-sqs.js";
-import { getState } from "./states.js";
+import { getState } from "./control.js";
 
 const gridNode = document.querySelector(".grid");
 const buttonsNode = document.querySelector(".buttonContainer");

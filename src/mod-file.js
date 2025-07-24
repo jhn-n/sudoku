@@ -1,38 +1,62 @@
 const MaxNumberSavedGames = 100;
 let startPosition;
+let gamePositionPtr;
 const gamePositions = [];
-// to add forward button!!
+
+function getStartPosition() {
+    return startPosition;
+}
 
 function saveStart(board) {
-    startPosition = board.clone();
+    startPosition = board.cloneValues();
+    gamePositions.length = 0;
+    gamePositionPtr = -1;
+    saveGame(board);
 }
 
 function loadStart(board) {
     try {
-        board.upload(startPosition);
+        board.uploadValues(startPosition);
     } catch (e) {
         console.error(`Could not load start position!\n${e}`);
     }
 }
 
 function saveGame(board) {
-    console.time("saveGame");
     while (gamePositions.length >= MaxNumberSavedGames) {
         gamePositions.shift();
+        gamePositionPtr -= 1;
     }
-    gamePositions.push(board.clone());
-    console.timeEnd("saveGame");
+    gamePositions.length = gamePositionPtr + 1;
+    gamePositions.push(board.cloneAll());
+    gamePositionPtr += 1;
 }
 
-function loadGame(board) {
-    if (gamePositions.length === 0) {
-        return;
-    }
+function backGame(board) {
+    if (gamePositionPtr === 0) return;
+    gamePositionPtr -= 1;
     try {
-        board.upload(gamePositions.pop());
+        board.uploadAll(gamePositions[gamePositionPtr]);
     } catch (e) {
-        console.error(`Could not load position!\n${e}`);
+        console.error(`Could not load position in backGame!\n${e}`);
     }
 }
 
-export const file = { saveStart, loadStart, saveGame, loadGame };
+function forwardGame(board) {
+    if (gamePositions.length === gamePositionPtr + 1) return;
+    gamePositionPtr += 1;
+    try {
+        board.uploadAll(gamePositions[gamePositionPtr]);
+    } catch (e) {
+        console.error(`Could not load position in forwardGame!\n${e}`);
+    }
+}
+
+export const file = {
+    getStartPosition,
+    saveStart,
+    loadStart,
+    saveGame,
+    backGame,
+    forwardGame,
+};
