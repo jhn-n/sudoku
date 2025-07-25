@@ -26,7 +26,7 @@ function sameBlock(c1, c2) {
     return blockOf(c1) === blockOf(c2);
 }
 
-function areNeighbours(c1, c2) {
+function arePeers(c1, c2) {
     if (sameRow(c1, c2) || sameColumn(c1, c2) || sameBlock(c1, c2)) {
         return true;
     }
@@ -72,31 +72,31 @@ function createBlockArray(startRow, startColumn) {
     return block;
 }
 
-const blocksAndLines = rows.concat(columns).concat(blocks);
+const houses = rows.concat(columns).concat(blocks);
 
-const neighbours = [];
+const peers = [];
 all.forEach((i) => {
-    const currentNeighbours = [];
+    const currentPeers = [];
     all.forEach((j) => {
-        if (j !== i && areNeighbours(i, j)) {
-            currentNeighbours.push(j);
+        if (j !== i && arePeers(i, j)) {
+            currentPeers.push(j);
         }
     });
-    neighbours.push(currentNeighbours);
+    peers.push(currentPeers);
 });
 
-// add neighboursOfNeighbours?
+// add peersOfpeers?
 
 export const sqs = {
     rowOf,
     columnOf,
     blockOf,
-    areNeighbours,
-    neighbours,
+    arePeers,
+    peers,
     rows,
     columns,
     blocks,
-    blocksAndLines,
+    houses,
     all,
 };
 

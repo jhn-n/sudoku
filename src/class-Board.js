@@ -1,6 +1,6 @@
-import { sqs } from "./mod-sqs.js";
-import { bit } from "./mod-bit.js";
-import { cmb } from "./mod-cmb.js";
+import { sqs } from "./mods/mod-sqs.js";
+import { bit } from "./mods/mod-bit.js";
+import { cmb } from "./mods/mod-cmb.js";
 
 class Cell {
     constructor() {
@@ -135,19 +135,19 @@ export class Board {
     }
 
     updateNotesAfterSetValue(sq, value) {
-        sqs.neighbours[sq].forEach((i) => this.removeNote(i, value));
+        sqs.peers[sq].forEach((i) => this.removeNote(i, value));
     }
 
     updateNotesAfterUndoValue(sq, undoValue) {
-        for (const i of sqs.neighbours[sq]) {
+        for (const i of sqs.peers[sq]) {
             if (this.hasValue(i)) {
                 this.removeNote(sq, this.getValue(i));
             } else {
-                if (sqs.neighbours[i].every((j) => this.getValue(j) !== undoValue)) {
+                if (sqs.peers[i].every((j) => this.getValue(j) !== undoValue)) {
                     this.addNote(i, undoValue);
                 }
                 // this.addNote(i, undoValue);
-                // for (const j of sqs.neighbours[i]) {
+                // for (const j of sqs.peers[i]) {
                 //     if (this.getValue(j) === undoValue) {
                 //         this.removeNote(i, undoValue);
                 //         break;
@@ -183,7 +183,7 @@ export class Board {
             }
         }
         for (let subsetSize = 2; subsetSize < 9; subsetSize++) {
-            for (const line of sqs.blocksAndLines) {
+            for (const line of sqs.houses) {
                 const activeSquares = line.filter((sq) => this.hasNoValue(sq));
                 for (const subsets of cmb.bipartitions(activeSquares, subsetSize)) {
                     const subsetSquares = subsets[0];

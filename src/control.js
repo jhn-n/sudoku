@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { Board } from "./class-Board.js";
-import { sqs } from "./mod-sqs.js";
-import { file } from "./mod-file.js";
-import { dom } from "./mod-dom.js";
+import { sqs } from "./mods/mod-sqs.js";
+import { file } from "./file.js";
+import { dom } from "./dom.js";
 
 const board = new Board();
 let state;
@@ -66,7 +66,7 @@ class GameMode {
     }
 
     missingNoteClick(i, j) {
-        if (sqs.neighbours[i].every((sq) => board.getValue(sq) !== j)) {
+        if (sqs.peers[i].every((sq) => board.getValue(sq) !== j)) {
             board.addNote(i, j);
             dom.displayAddNote(i, j);
             file.saveGame(board);

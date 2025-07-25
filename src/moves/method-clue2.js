@@ -172,7 +172,7 @@ function findYWings() {
     );
     for (const pivot of squaresWithTwoNotes) {
         const potentialPincers = squaresWithTwoNotes
-            .filter((sq) => squares.areNeighbours(pivot, sq))
+            .filter((sq) => squares.arePeers(pivot, sq))
             .filter((sq) => countBits(this.noteIntersection([pivot, sq])) === 1);
         const numPotentials = potentialPincers.length;
         if (numPotentials < 2) {
@@ -189,8 +189,8 @@ function findYWings() {
                 continue;
             }
             const targets = squares.all
-                .filter((sq) => squares.areNeighbours(sq, pincers[0]))
-                .filter((sq) => squares.areNeighbours(sq, pincers[1]))
+                .filter((sq) => squares.arePeers(sq, pincers[0]))
+                .filter((sq) => squares.arePeers(sq, pincers[1]))
                 .filter((sq) => (this.cells[sq].notes & pincersIntersection) !== 0);
             if (targets.length === 0) {
                 continue;

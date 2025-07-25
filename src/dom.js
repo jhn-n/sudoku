@@ -1,4 +1,4 @@
-import { sqs } from "./mod-sqs.js";
+import { sqs } from "./mods/mod-sqs.js";
 import { getState } from "./control.js";
 
 const gridNode = document.querySelector(".grid");
