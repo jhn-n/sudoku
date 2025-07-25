@@ -146,13 +146,6 @@ export class Board {
                 if (sqs.peers[i].every((j) => this.getValue(j) !== undoValue)) {
                     this.addNote(i, undoValue);
                 }
-                // this.addNote(i, undoValue);
-                // for (const j of sqs.peers[i]) {
-                //     if (this.getValue(j) === undoValue) {
-                //         this.removeNote(i, undoValue);
-                //         break;
-                //     }
-                // }
             }
         }
     }
@@ -165,7 +158,8 @@ export class Board {
         console.timeEnd("recalculateAllNotes");
     }
 
-    createNoteLabels(targetSqs, notesToMatch) {
+    createNoteLabels(data) {
+        const [targetSqs, notesToMatch] = data;
         const noteLabels = [];
         for (const sq of targetSqs) {
             const hitNotes = this.getNotes(sq) & notesToMatch;
