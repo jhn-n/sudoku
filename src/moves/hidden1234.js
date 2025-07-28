@@ -1,16 +1,24 @@
 import { sqs } from "../mods/mod-sqs.js";
 import { bit } from "../mods/mod-bit.js";
 import { cmb } from "../mods/mod-cmb.js";
-import { Move } from "./move-index.js";
+import { Move } from "./class-Move.js";
 
 export { hidden1234 };
 
-const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
+// const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
 
 function hidden1234(board, n) {
     console.assert(n >= 1 && n <= 4, "Invalid argument to hidden1234");
     console.time(`hidden1234-${n}`);
     const movesFound = [];
+    const hint =
+        n === 1
+            ? "Look for a value which occurs only once in the notes of a house"
+            : `Look for ${n} values which only occur in the notes of ${n} cells of a house`;
+    const description =
+        n === 1
+            ? "This value can only occur in this cell, so no other value is possible here"
+            : `These ${n} values can only occur in these ${n} cells, so other values can be excluded`;
 
     for (const house of sqs.houses) {
         const activeSquares = house.filter((i) => board.hasNoValue(i));
@@ -34,11 +42,12 @@ function hidden1234(board, n) {
             }
 
             const newMove = new Move(
-                board,
-                `Hidden ${numberWord[n]}`,
+                this.name, //`Hidden ${numberWord[n]}`,
+                hint,
+                description,
                 house,
-                [subsetB, bit.not(subsetANotes)],
-                [subsetB, subsetANotes],
+                board.createNoteLabels(subsetB, bit.not(subsetANotes)),
+                board.createNoteLabels(subsetB, subsetANotes),
             );
             movesFound.push(newMove);
         }

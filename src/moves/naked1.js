@@ -1,6 +1,7 @@
 import { sqs } from "../mods/mod-sqs.js";
 import { bit } from "../mods/mod-bit.js";
-import { Move } from "./move-index.js";
+import { Move } from "./class-Move.js";
+
 
 export { naked1 };
 
@@ -11,13 +12,12 @@ function naked1(board) {
     const nakedSquares = sqs.all.filter((i) => board.noteCount(i) === 1);
     for (const sq of nakedSquares) {
         const newMove = new Move(
-            board,
-            `Naked Single`,
+            this.name, // `Naked Single`,
             `Look for a cell with only one possible value`,
-            `This cell has only a single note so this must be its value`,
+            `This cell has only a single note so that must be its value`,
             [sq],
-            [[sq], bit.allNotes],
-            [[], 0],
+            board.createNoteLables([sq], bit.allNotes),
+            [],
         );
         movesFound.push(newMove);
     }

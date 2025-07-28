@@ -2,3 +2,4 @@ Add move description and tips
 Implement move analysis
 Consider Modes for Tip and move
 Add 1 to 9 grid filters
+"Confirm" prompt for reset

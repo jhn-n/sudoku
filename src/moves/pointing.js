@@ -1,6 +1,7 @@
 import { sqs } from "../mods/mod-sqs.js";
 import { bit } from "../mods/mod-bit.js";
-import { Move } from "./move-index.js";
+import { Move } from "./class-Move.js";
+
 
 export { pointing, claiming };
 
@@ -23,14 +24,15 @@ function pointing(board) {
         const targetNotes = blockAndLineNotes & lineOnlyNotes & bit.not(blockOnlyNotes);
         const numTargetNotes = bit.countBits(targetNotes);
 
-        // exclude 1 target note - this will be spotted by only place
+        // exclude 1 target note - this will be spotted by hidden single
         if (numTargetNotes > 1) {
             const newMove = new Move(
-                board,
-                `Pointing`,
+                this.name, //`Pointing`,
+                "Look for a block value that only occurs in the notes of a single line",
+                "This block value must occur on this line, so can be removed from other line cells",
                 triple.flat(),
-                [activeBlockAndLine, targetNotes],
-                [activeLineOnly, targetNotes],
+                board.createNoteLabels(activeBlockAndLine, targetNotes),
+                board.createNoteLabels(activeLineOnly, targetNotes),
             );
             movesFound.push(newMove);
         }
@@ -54,14 +56,15 @@ function claiming(board) {
         const targetNotes = blockAndLineNotes & bit.not(lineOnlyNotes) & blockOnlyNotes;
         const numTargetNotes = bit.countBits(targetNotes);
 
-        // exclude 1 target note - this will be spotted by only place
+        // exclude 1 target note - this will be spotted by hidden single
         if (numTargetNotes > 1) {
             const newMove = new Move(
-                board,
-                `Claiming`,
+                this.name, //`Claiming`,
+                "Look for a line value that only occurs in the notes of a single block",
+                "This line value must occur in this block, so can be removed from other block cells",
                 triple.flat(),
-                [activeBlockAndLine, targetNotes],
-                [activeBlockOnly, targetNotes],
+                board.createNoteLabels(activeBlockAndLine, targetNotes),
+                board.createNoteLabels(activeBlockOnly, targetNotes),
             );
             movesFound.push(newMove);
         }

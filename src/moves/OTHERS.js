@@ -1,3 +1,6 @@
+import { Move } from "./class-Move.js";
+
+
 // returns a binary indicating presence of specified note
 function squaresToNoteTrace(squares, note) {
     return squares

@@ -1,11 +1,12 @@
 import { sqs } from "../mods/mod-sqs.js";
 import { bit } from "../mods/mod-bit.js";
 import { cmb } from "../mods/mod-cmb.js";
-import { Move } from "./move-index.js";
+import { Move } from "./class-Move.js";
+
 
 export { naked234 };
 
-const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
+// const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
 
 function naked234(board, n) {
     console.assert(n >= 2 && n <= 4, "Invalid argument to naked234");
@@ -32,11 +33,12 @@ function naked234(board, n) {
                 continue;
             }
             const newMove = new Move(
-                board,
-                `Naked ${numberWord[n]}`,
+                this.name, //`Naked ${numberWord[n]}`,
+                `Look for ${n} cells which can only take ${n} values between them`,
+                `There are only ${n} possible values for these ${n} cells so the values cannot appear elsewhere in the house`,
                 house,
-                [subsetA, subsetANotes],
-                [subsetB, subsetANotes],
+                board.createNoteLabels(subsetA, subsetANotes),
+                board.createNoteLabels(subsetB, subsetANotes),
             );
             movesFound.push(newMove);
         }

@@ -3,6 +3,7 @@ import { Board } from "./class-Board.js";
 import { sqs } from "./mods/mod-sqs.js";
 import { file } from "./file.js";
 import { dom } from "./dom.js";
+import { calc } from "./moves/move-index.js";
 
 const board = new Board();
 let state;
@@ -27,6 +28,19 @@ export function startDefault() {
 export function start() {
     board.resetAll();
     state = new SetupMode();
+}
+
+function reset() {
+    if (confirm("Reset all values - are you sure?")) {
+        start();
+    }
+}
+
+function restart() {
+    if (confirm("Go back to start position - are you sure?")) {
+        file.loadStart(board);
+        state = new SetupMode();
+    }
 }
 
 class GameMode {
@@ -93,11 +107,10 @@ class GameMode {
                 state = new GameMode();
                 break;
             case "restart":
-                file.loadStart(board);
-                state = new SetupMode();
+                restart();
                 break;
             case "reset":
-                start();
+                reset();
                 break;
         }
     }
@@ -146,7 +159,7 @@ class SetupMode {
                 state = new GameMode();
                 break;
             case "reset":
-                start();
+                reset();
                 break;
         }
     }
@@ -162,9 +175,9 @@ class SetupMode {
 class InvalidMode {
     constructor(invalidSubset) {
         const standardDescription =
-            (invalidSubset.line.length === 0
+            invalidSubset.line.length === 0
                 ? "Cell has no notes available - undo incorrect values"
-                : "Cells have insufficient notes available - undo incorrect values")
+                : "Cells have insufficient notes available - undo incorrect values";
         dom.displayInvalid(invalidSubset);
         dom.displayButtons(["reset"]);
         dom.displayMessage("Invalid position");
@@ -200,7 +213,7 @@ class InvalidMode {
     buttonClick(type) {
         switch (type) {
             case "reset":
-                start();
+                reset();
                 break;
         }
     }

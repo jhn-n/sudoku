@@ -158,8 +158,7 @@ export class Board {
         console.timeEnd("recalculateAllNotes");
     }
 
-    createNoteLabels(data) {
-        const [targetSqs, notesToMatch] = data;
+    createNoteLabels(targetSqs, notesToMatch) {
         const noteLabels = [];
         for (const sq of targetSqs) {
             const hitNotes = this.getNotes(sq) & notesToMatch;
