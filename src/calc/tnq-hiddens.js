@@ -9,7 +9,6 @@ export { hidden1234 };
 
 function hidden1234(board, n) {
     console.assert(n >= 1 && n <= 4, "Invalid argument to hidden1234");
-    console.time(`hidden1234-${n}`);
     const movesFound = [];
     const hint =
         n === 1
@@ -53,6 +52,5 @@ function hidden1234(board, n) {
         }
     }
 
-    console.timeEnd(`hidden1234-${n}`);
     return movesFound;
 }

@@ -10,19 +10,18 @@ const pointingTriples = blockAndLineTriples(sqs.rowOf).concat(
 );
 
 function pointing(board) {
-    console.time("pointing");
     const movesFound = [];
     for (const triple of pointingTriples) {
         const activeBlockAndLine = triple[0].filter((i) => board.hasNoValue(i));
         const activeBlockOnly = triple[1].filter((i) => board.hasNoValue(i));
         const activeLineOnly = triple[2].filter((i) => board.hasNoValue(i));
 
-        const blockAndLineNotes = this.noteUnion(activeBlockAndLine);
-        const blockOnlyNotes = this.noteUnion(activeBlockOnly);
-        const lineOnlyNotes = this.noteUnion(activeLineOnly);
+        const blockAndLineNotes = board.noteUnion(activeBlockAndLine);
+        const blockOnlyNotes = board.noteUnion(activeBlockOnly);
+        const lineOnlyNotes = board.noteUnion(activeLineOnly);
 
         const targetNotes = blockAndLineNotes & lineOnlyNotes & bit.not(blockOnlyNotes);
-        const numTargetNotes = bit.countBits(targetNotes);
+        const numTargetNotes = bit.count(targetNotes);
 
         // exclude 1 target note - this will be spotted by hidden single
         if (numTargetNotes > 1) {
@@ -37,24 +36,22 @@ function pointing(board) {
             movesFound.push(newMove);
         }
     }
-    console.timeEnd("pointing");
     return movesFound;
 }
 
 function claiming(board) {
-    console.time("claiming");
     const movesFound = [];
     for (const triple of pointingTriples) {
         const activeBlockAndLine = triple[0].filter((i) => board.hasNoValue(i));
         const activeBlockOnly = triple[1].filter((i) => board.hasNoValue(i));
         const activeLineOnly = triple[2].filter((i) => board.hasNoValue(i));
 
-        const blockAndLineNotes = this.noteUnion(activeBlockAndLine);
-        const blockOnlyNotes = this.noteUnion(activeBlockOnly);
-        const lineOnlyNotes = this.noteUnion(activeLineOnly);
+        const blockAndLineNotes = board.noteUnion(activeBlockAndLine);
+        const blockOnlyNotes = board.noteUnion(activeBlockOnly);
+        const lineOnlyNotes = board.noteUnion(activeLineOnly);
 
         const targetNotes = blockAndLineNotes & bit.not(lineOnlyNotes) & blockOnlyNotes;
-        const numTargetNotes = bit.countBits(targetNotes);
+        const numTargetNotes = bit.count(targetNotes);
 
         // exclude 1 target note - this will be spotted by hidden single
         if (numTargetNotes > 1) {
@@ -69,7 +66,6 @@ function claiming(board) {
             movesFound.push(newMove);
         }
     }
-    console.timeEnd("claiming");
     return movesFound;
 }
 

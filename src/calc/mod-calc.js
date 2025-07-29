@@ -1,7 +1,6 @@
-import { naked1 } from "./naked1.js";
-import { naked234 } from "./naked234.js";
-import { hidden1234 } from "./hidden1234.js";
-import { pointing, claiming } from "./pointing.js";
+import { naked1, naked234 } from "./tnq-nakeds.js";
+import { hidden1234 } from "./tnq-hiddens.js";
+import { pointing, claiming } from "./tnq-pointing.js";
 
 class Strategy {
     constructor(name, difficulty, findMove) {
@@ -25,11 +24,13 @@ const strategies = [
 ];
 
 
-function findMove() {
+function findMove(board) {
     console.time("findMove");
     let result = null;
     for (const strategy of strategies) {
-        const moves = strategy();
+        console.time(`  ${strategy.name}`)
+        const moves = strategy.findMove(board);
+        console.timeEnd(`  ${strategy.name}`)
         if (moves.length > 0) {
             moves.sort((a, b) => {
                 return b.deadNotes.length - a.deadNotes.length;
@@ -38,7 +39,7 @@ function findMove() {
             break;
         }
     }
-    console.timeEnd("clue");
+    console.timeEnd("findMove");
     return result;
 }
 

@@ -3,10 +3,11 @@ import { Board } from "./class-Board.js";
 import { sqs } from "./mods/mod-sqs.js";
 import { file } from "./file.js";
 import { dom } from "./dom.js";
-import { calc } from "./moves/move-index.js";
+import { calc } from "./calc/mod-calc.js";
 
 const board = new Board();
 let state;
+// let move = calc.findMove(board);
 
 export function getState() {
     return state;
@@ -37,7 +38,7 @@ function reset() {
 }
 
 function restart() {
-    if (confirm("Go back to start position - are you sure?")) {
+    if (confirm("Return to start position - are you sure?")) {
         file.loadStart(board);
         state = new SetupMode();
     }
@@ -93,6 +94,9 @@ class GameMode {
 
     buttonClick(type) {
         switch (type) {
+            case "clue":
+                alert("No clue found!");
+                break;
             case "recalc":
                 file.saveGame(board);
                 board.recalculateAllNotes();

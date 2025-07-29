@@ -3,14 +3,31 @@ import { bit } from "../mods/mod-bit.js";
 import { cmb } from "../mods/mod-cmb.js";
 import { Move } from "./class-Move.js";
 
+export { naked1, naked234 };
 
-export { naked234 };
+function naked1(board) {
+    const movesFound = [];
+
+    const nakedSquares = sqs.all.filter((i) => board.noteCount(i) === 1);
+    for (const sq of nakedSquares) {
+        const newMove = new Move(
+            this.name, // `Naked Single`,
+            `Look for a cell with only one possible value`,
+            `This cell has only a single note so that must be its value`,
+            [sq],
+            board.createNoteLables([sq], bit.allNotes),
+            [],
+        );
+        movesFound.push(newMove);
+    }
+
+    return movesFound;
+}
 
 // const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
 
 function naked234(board, n) {
     console.assert(n >= 2 && n <= 4, "Invalid argument to naked234");
-    console.time(`naked234-${n}`);
     const movesFound = [];
 
     for (const house of sqs.houses) {
@@ -44,6 +61,5 @@ function naked234(board, n) {
         }
     }
 
-    console.timeEnd(`naked234-${n}`);
     return movesFound;
 }
