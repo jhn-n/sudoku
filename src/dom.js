@@ -1,5 +1,5 @@
 import { sqs } from "./mods/mod-sqs.js";
-import { getState } from "./control.js";
+import { getState, buttonAction } from "./control.js";
 
 const gridNode = document.querySelector(".grid");
 const buttonsNode = document.querySelector(".buttonContainer");
@@ -69,8 +69,7 @@ function displayButtons(buttonTexts) {
         newButton.classList.add("button");
         newButton.innerText = button;
         newButton.addEventListener("click", () => {
-            const state = getState();
-            state.buttonClick(button);
+            buttonAction[button]();
         });
         buttonsNode.appendChild(newButton);
     }
@@ -98,6 +97,16 @@ function displayMove(move) {
     for (const deadNote of move.deadNotes) {
         const cellNode = gridNode.children[deadNote.cell];
         cellNode.children[deadNote.note - 1].classList.add("move-deadnote");
+    }
+    moveDisplayed = move;
+}
+
+function displayMoveLineSqs(move) {
+        if (!move) {
+        return;
+    }
+    for (const sq of move.lineSqs) {
+        gridNode.children[sq].classList.add("move-line");
     }
     moveDisplayed = move;
 }
@@ -165,6 +174,7 @@ export const dom = {
     displayMessage,
     displayDescription,
     displayMove,
+    displayMoveLineSqs,
     removeMove,
     displayInvalid,
     removeInvalid,

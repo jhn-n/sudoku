@@ -1,16 +1,23 @@
 /* eslint-disable no-unused-vars */
 import { Board } from "./class-Board.js";
 import { sqs } from "./mods/mod-sqs.js";
-import { file } from "./file.js";
+import { file } from "./mods/mod-file.js";
 import { dom } from "./dom.js";
 import { calc } from "./calc/mod-calc.js";
 
 const board = new Board();
 let state;
+let move;
+
 // let move = calc.findMove(board);
 
 export function getState() {
     return state;
+}
+
+export function start() {
+    board.resetAll();
+    state = new SetupMode();
 }
 
 export function startDefault() {
@@ -26,38 +33,126 @@ export function startDefault() {
     state = new SetupMode();
 }
 
-export function start() {
-    board.resetAll();
-    state = new SetupMode();
-}
-
-function reset() {
-    if (confirm("Reset all values - are you sure?")) {
-        start();
-    }
-}
-
-function restart() {
-    if (confirm("Return to start position - are you sure?")) {
-        file.loadStart(board);
-        state = new SetupMode();
-    }
-}
-
-class GameMode {
-    constructor() {
+export const buttonAction = {
+    reset() {
+        if (confirm("Reset all values - are you sure?")) {
+            start();
+        }
+    },
+    restart() {
+        if (confirm("Return to start position - are you sure?")) {
+            file.loadStart(board);
+            state = new SetupMode();
+        }
+    },
+    done() {
+        file.saveStart(board);
+        state = new GameMode();
+    },
+    forward() {
+        file.forwardGame(board);
         dom.displayBoard(board);
-        dom.displayButtons(["clue", "recalc", "back", "forward", "restart", "reset"]);
-        dom.displayMessage("Over to you!");
-        dom.displayDescription("Use both mouse buttons to toggle values and notes");
-    }
+        state = new GameMode(); // better to display DOM?
+    },
+    back() {
+        file.backGame(board);
+        dom.displayBoard(board);
+        state = new GameMode();
+    },
+    recalc() {
+        if (confirm("Recalculate all notes based on values shown?")) {
+            file.saveGame(board);
+            board.recalculateAllNotes();
+            dom.displayBoard(board);
+        }
+    },
+    clue() {
+        move = calc.findMove(board);
+        if (move) {
+            state = new HintMode(false);
+        }
+    },
+    show() {
+        state = new HintMode(true);
+    },
+    hide() {
+        dom.removeMove();
+        state = new GameMode();
+    },
+};
 
-    valueClick(i) {
-        const startPosition = file.getStartPosition();
-        if (startPosition[i]) return;
+const action = {
+    removeNote(i, j) {
+        board.removeNote(i, j);
+        dom.displayRemoveNote(i, j);
+        file.saveGame(board);
+    },
+    reinstateMissingNote(i, j) {
+        if (sqs.peers[i].every((sq) => board.getValue(sq) !== j)) {
+            board.addNote(i, j);
+            dom.displayAddNote(i, j);
+            file.saveGame(board);
+        }
+    },
+    setValue(i, j) {
+        board.setValue(i, j);
+        dom.displayBoard(board);
+        file.saveGame(board);
+        state = board.isComplete() ? new EndMode() : new GameMode();
+    },
+    undoValue(i) {
         board.undoValue(i);
         dom.displayBoard(board);
         file.saveGame(board);
+        state = new GameMode();
+    },
+    setValueOrRemoveNote(i, j) {
+        if (board.noteCount(i) === 1) {
+            this.setValue(i, j);
+        } else {
+            this.removeNote(i, j);
+        }
+    },
+};
+
+class EndMode {
+    constructor(bool) {
+        dom.displayButtons(["back", "restart", "reset"]);
+        dom.displayMessage("Congratulations!");
+        dom.displayDescription("");
+    }
+
+    valueClick(i) {
+        if (file.getStartPosition()[i]) return;
+        action.undoValue(i);
+        state = new GameMode();
+    }
+
+    valueClickRight(i) {
+        this.valueClick(i);
+    }
+}
+
+class HintMode {
+    constructor(bool) {
+        if (bool) {
+            dom.displayMove(move);
+            dom.displayButtons(["hide"]);
+            dom.displayMessage(move.type);
+            dom.displayDescription(move.description);
+        } else {
+            if (move.type !== "Naked Single") {
+                dom.displayMoveLineSqs(move);
+            }
+            dom.displayButtons(["show", "hide"]);
+            dom.displayDescription(move.hint);
+            dom.displayMessage(move.type);
+        }
+    }
+
+    valueClick(i) {
+        if (file.getStartPosition()[i]) return;
+        action.undoValue(i);
     }
 
     valueClickRight(i) {
@@ -65,58 +160,56 @@ class GameMode {
     }
 
     presentNoteClick(i, j) {
-        board.setValue(i, j);
-        dom.displayBoard(board);
-        file.saveGame(board);
+        action.setValue(i, j);
     }
 
     presentNoteClickRight(i, j) {
-        if (board.noteCount(i) === 1) {
-            this.presentNoteClick(i, j);
-        } else {
-            board.removeNote(i, j);
-            dom.displayRemoveNote(i, j);
-            file.saveGame(board);
+        action.setValueOrRemoveNote(i, j);
+        if (move.deadNotes.every((e) => !board.hasNote(e.cell, e.note))) {
+            dom.removeMove();
+            state = new GameMode();
         }
     }
 
     missingNoteClick(i, j) {
-        if (sqs.peers[i].every((sq) => board.getValue(sq) !== j)) {
-            board.addNote(i, j);
-            dom.displayAddNote(i, j);
-            file.saveGame(board);
-        }
+        action.reinstateMissingNote(i, j);
     }
 
     missingNoteClickRight(i, j) {
         this.missingNoteClick(i, j);
     }
+}
 
-    buttonClick(type) {
-        switch (type) {
-            case "clue":
-                alert("No clue found!");
-                break;
-            case "recalc":
-                file.saveGame(board);
-                board.recalculateAllNotes();
-                dom.displayBoard(board);
-                break;
-            case "back":
-                file.backGame(board);
-                state = new GameMode();
-                break;
-            case "forward":
-                file.forwardGame(board);
-                state = new GameMode();
-                break;
-            case "restart":
-                restart();
-                break;
-            case "reset":
-                reset();
-                break;
-        }
+class GameMode {
+    constructor() {
+        dom.displayButtons(["clue", "recalc", "back", "forward", "restart", "reset"]);
+        dom.displayMessage("Get solving!");
+        dom.displayDescription("Use both mouse buttons to toggle values and notes");
+    }
+
+    valueClick(i) {
+        if (file.getStartPosition()[i]) return;
+        action.undoValue(i);
+    }
+
+    valueClickRight(i) {
+        this.valueClick(i);
+    }
+
+    presentNoteClick(i, j) {
+        action.setValue(i, j);
+    }
+
+    presentNoteClickRight(i, j) {
+        action.setValueOrRemoveNote(i, j);
+    }
+
+    missingNoteClick(i, j) {
+        action.reinstateMissingNote(i, j);
+    }
+
+    missingNoteClickRight(i, j) {
+        action.reinstateMissingNote(i, j);
     }
 }
 
@@ -125,7 +218,7 @@ class SetupMode {
         dom.displayBoard(board);
         dom.displayButtons(["done", "reset"]);
         dom.displayMessage("Create start position");
-        dom.displayDescription("Click done button when complete");
+        dom.displayDescription("Click done when ready");
     }
 
     valueClick(i) {
@@ -155,19 +248,6 @@ class SetupMode {
         return;
     }
 
-    buttonClick(type) {
-        switch (type) {
-            case "done":
-                console.log("Done with setup");
-                file.saveStart(board);
-                state = new GameMode();
-                break;
-            case "reset":
-                reset();
-                break;
-        }
-    }
-
     #checkIfPositionInvalid() {
         const invalidSubset = board.findInvalidSubset();
         if (invalidSubset) {
@@ -180,8 +260,8 @@ class InvalidMode {
     constructor(invalidSubset) {
         const standardDescription =
             invalidSubset.line.length === 0
-                ? "Cell has no notes available - undo incorrect values"
-                : "Cells have insufficient notes available - undo incorrect values";
+                ? "Cell has no notes available - undo or reset"
+                : "Highlighted cells have insufficient notes available - undo or reset";
         dom.displayInvalid(invalidSubset);
         dom.displayButtons(["reset"]);
         dom.displayMessage("Invalid position");
@@ -212,14 +292,6 @@ class InvalidMode {
 
     missingNoteClickRight(i, j) {
         return;
-    }
-
-    buttonClick(type) {
-        switch (type) {
-            case "reset":
-                reset();
-                break;
-        }
     }
 
     #checkIfPositionValid() {

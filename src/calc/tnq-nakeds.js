@@ -13,9 +13,9 @@ function naked1(board) {
         const newMove = new Move(
             this.name, // `Naked Single`,
             `Look for a cell with only one possible value`,
-            `This cell has only a single note so that must be its value`,
+            `This cell has only one note - that must be its value!`,
             [sq],
-            board.createNoteLables([sq], bit.allNotes),
+            board.createNoteLabels([sq], bit.allNotes),
             [],
         );
         movesFound.push(newMove);
@@ -24,7 +24,7 @@ function naked1(board) {
     return movesFound;
 }
 
-// const numberWord = { 1: "single", 2: "double", 3: "triple", 4: "quadruple" };
+const numberWord = { 1: "Single", 2: "Double", 3: "Triple", 4: "Quadruple" };
 
 function naked234(board, n) {
     console.assert(n >= 2 && n <= 4, "Invalid argument to naked234");
@@ -34,9 +34,9 @@ function naked234(board, n) {
         const activeSquares = house.filter((i) => board.hasNoValue(i));
 
         // To avoid replication between naked and hiddens
-        // if (n > Math.floor(activeSquares.length / 2)) {
-        // continue;
-        // }
+        if (n > Math.floor(activeSquares.length / 2)) {
+        continue;
+        }
         // could remove Math.floor?
 
         for (const subsets of cmb.bipartitions(activeSquares, n)) {
@@ -50,9 +50,9 @@ function naked234(board, n) {
                 continue;
             }
             const newMove = new Move(
-                this.name, //`Naked ${numberWord[n]}`,
+                `Naked ${numberWord[n]}`,
                 `Look for ${n} cells which can only take ${n} values between them`,
-                `There are only ${n} possible values for these ${n} cells so the values cannot appear elsewhere in the house`,
+                `There are only ${n} possible values for these ${n} cells so the values cannot be used elsewhere in the house`,
                 house,
                 board.createNoteLabels(subsetA, subsetANotes),
                 board.createNoteLabels(subsetB, subsetANotes),
