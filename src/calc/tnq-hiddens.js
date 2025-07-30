@@ -13,10 +13,10 @@ function hidden1234(board, n) {
     const hint =
         n === 1
             ? "Look for a note which is only in one cell of its house"
-            : `Look for ${n} notes which are only in ${n} cells of a house`;
+            : `Look for ${n} notes which are in only ${n} cells of the house`;
     const description =
         n === 1
-            ? "This value must be in this cell, so no other value is possible"
+            ? "This value must be in this cell, so no other value is possible here"
             : `These ${n} values must be in these ${n} cells, so no other values are possible`;
 
     for (const house of sqs.houses) {

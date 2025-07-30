@@ -27,8 +27,8 @@ function pointing(board) {
         if (numTargetNotes > 1) {
             const newMove = new Move(
                 this.name, //`Pointing`,
-                "Look for a block note that is restricted to a single line",
-                "This block value must be on this line, so can be removed from other line cells",
+                "Look for block notes restricted to a single line",
+                "Block values restricted to a line can be removed from other line cells",
                 triple.flat(),
                 board.createNoteLabels(activeBlockAndLine, targetNotes),
                 board.createNoteLabels(activeLineOnly, targetNotes),
@@ -57,8 +57,8 @@ function claiming(board) {
         if (numTargetNotes > 1) {
             const newMove = new Move(
                 this.name, //`Claiming`,
-                "Look for a line note that is restricted to a single block",
-                "This line value must be in this block, so can be removed from other block cells",
+                "Look for line notes restricted to a single block",
+                "Line values restricted to a block can be removed from other block cells",
                 triple.flat(),
                 board.createNoteLabels(activeBlockAndLine, targetNotes),
                 board.createNoteLabels(activeBlockOnly, targetNotes),

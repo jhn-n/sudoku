@@ -52,7 +52,7 @@ function naked234(board, n) {
             const newMove = new Move(
                 `Naked ${numberWord[n]}`,
                 `Look for ${n} cells which can only take ${n} values between them`,
-                `There are only ${n} possible values for these ${n} cells so the values cannot be used elsewhere in the house`,
+                `There are only ${n} possible values across ${n} cells so the values cannot be used elsewhere in the house`,
                 house,
                 board.createNoteLabels(subsetA, subsetANotes),
                 board.createNoteLabels(subsetB, subsetANotes),

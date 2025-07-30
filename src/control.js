@@ -35,12 +35,12 @@ export function startDefault() {
 
 export const buttonAction = {
     reset() {
-        if (confirm("Reset all values - are you sure?")) {
+        if (confirm("Reset back to empty board - are you sure?")) {
             start();
         }
     },
     restart() {
-        if (confirm("Return to start position - are you sure?")) {
+        if (confirm("Return to start position - are you sure?\nAll progress will be lost")) {
             file.loadStart(board);
             state = new SetupMode();
         }
@@ -60,11 +60,9 @@ export const buttonAction = {
         state = new GameMode();
     },
     recalc() {
-        if (confirm("Recalculate all notes based on values shown?")) {
-            file.saveGame(board);
             board.recalculateAllNotes();
             dom.displayBoard(board);
-        }
+            file.saveGame(board);
     },
     clue() {
         move = calc.findMove(board);
