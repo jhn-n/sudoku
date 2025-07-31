@@ -1,4 +1,5 @@
-Add new move techniques
+Debug Xwing - why does it show moves with no deadnotes?
+Add new moves techniques
 Add SVG icons
-Fromat outside
+Format outside
 Add 1 to 9 grid filters

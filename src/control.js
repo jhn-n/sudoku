@@ -40,7 +40,9 @@ export const buttonAction = {
         }
     },
     restart() {
-        if (confirm("Return to start position - are you sure?\nAll progress will be lost")) {
+        if (
+            confirm("Return to start position - are you sure?\nAll progress will be lost")
+        ) {
             file.loadStart(board);
             state = new SetupMode();
         }
@@ -60,9 +62,9 @@ export const buttonAction = {
         state = new GameMode();
     },
     recalc() {
-            board.recalculateAllNotes();
-            dom.displayBoard(board);
-            file.saveGame(board);
+        board.recalculateAllNotes();
+        dom.displayBoard(board);
+        file.saveGame(board);
     },
     clue() {
         move = calc.findMove(board);
@@ -158,15 +160,15 @@ class HintMode {
     }
 
     presentNoteClick(i, j) {
-        action.setValue(i, j);
-    }
-
-    presentNoteClickRight(i, j) {
         action.setValueOrRemoveNote(i, j);
         if (move.deadNotes.every((e) => !board.hasNote(e.cell, e.note))) {
             dom.removeMove();
             state = new GameMode();
         }
+    }
+
+    presentNoteClickRight(i, j) {
+        action.setValue(i, j);
     }
 
     missingNoteClick(i, j) {
@@ -195,11 +197,11 @@ class GameMode {
     }
 
     presentNoteClick(i, j) {
-        action.setValue(i, j);
+        action.setValueOrRemoveNote(i, j);
     }
 
     presentNoteClickRight(i, j) {
-        action.setValueOrRemoveNote(i, j);
+        action.setValue(i, j);
     }
 
     missingNoteClick(i, j) {
