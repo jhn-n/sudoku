@@ -11,7 +11,7 @@ function naked1(board) {
     const nakedSquares = sqs.all.filter((i) => board.noteCount(i) === 1);
     for (const sq of nakedSquares) {
         const newMove = new Move(
-            this.name, // `Naked Single`,
+            `Naked Single`,
             `Look for a cell with only one possible value`,
             `This cell has only one note - that must be its value!`,
             [sq],

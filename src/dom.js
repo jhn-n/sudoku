@@ -102,7 +102,7 @@ function displayMove(move) {
 }
 
 function displayMoveLineSqs(move) {
-        if (!move) {
+    if (!move) {
         return;
     }
     for (const sq of move.lineSqs) {
@@ -115,16 +115,21 @@ function removeMove() {
     if (!moveDisplayed) {
         return;
     }
+    console.log(moveDisplayed);
     for (const sq of moveDisplayed.lineSqs) {
         gridNode.children[sq].classList.remove("move-line");
     }
     for (const keyNote of moveDisplayed.keyNotes) {
         const cellNode = gridNode.children[keyNote.cell];
+        if (cellNode.classList.contains("value")) break;
+        console.log(keyNote.cell, cellNode);
+        console.log(keyNote.note);
         cellNode.children[keyNote.note - 1].classList.remove("move-keynote");
     }
 
     for (const deadNote of moveDisplayed.deadNotes) {
         const cellNode = gridNode.children[deadNote.cell];
+        if (cellNode.classList.contains("value")) break;
         cellNode.children[deadNote.note - 1].classList.remove("move-deadnote");
     }
     moveDisplayed = null;

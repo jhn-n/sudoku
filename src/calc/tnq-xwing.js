@@ -4,7 +4,7 @@ import { cmb } from "../mods/mod-cmb.js";
 import { Move } from "./class-Move.js";
 
 export { xWing };
-const name = { 2: "X-Wing", 3: "Swordfish", 4: "Jellyfish" };
+const xWingNames = { 2: "X-Wing", 3: "Swordfish", 4: "Jellyfish" };
 
 function xWing(board, n) {
     const movesFound = [];
@@ -31,10 +31,10 @@ function xWing(board, n) {
                 targetColumnIndices,
                 true,
             );
-            if ((bit.union(sweepCells) & bit.nth(x)) === 0) continue;
+            if ((board.noteUnion(sweepCells) & bit.nth(x)) === 0) continue;
 
             const newMove = new Move(
-                `${name[n]} Rows`,
+                `${xWingNames[n]} Rows`,
                 `Look for a note in ${n} rows that is restricted to only ${n} columns`,
                 `The note value for the ${n} columns must be in these ${n} rows only`,
                 lines,
@@ -67,10 +67,10 @@ function xWing(board, n) {
                 targetColIndices,
                 false,
             );
-            if ((bit.union(sweepCells) & bit.nth(x)) === 0) continue;
+            if ((board.noteUnion(sweepCells) & bit.nth(x)) === 0) continue;
 
             const newMove = new Move(
-                `${name[n]} Columns`,
+                `${xWingNames[n]} Columns`,
                 `Look for a note in ${n} columns that is restricted to only ${n} rows`,
                 `The note value for the ${n} rows must be in these ${n} columns only`,
                 lines,
@@ -91,7 +91,7 @@ function generateCellsForXWing(rowIndices, colIndices, isRowType) {
         const sqColumn = sqs.columnOf(sq);
         const inTargetRows = rowIndices.includes(sqRow);
         const inTargetColumns = colIndices.includes(sqColumn);
-        if (inTargetColumns && inTargetRows) {
+        if (inTargetRows && inTargetColumns) {
             crossCells.push(sq);
         } else if (isRowType && !inTargetRows && inTargetColumns) {
             sweepCells.push(sq);

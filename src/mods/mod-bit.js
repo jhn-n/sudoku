@@ -15,7 +15,7 @@ function add(num, bit) {
 }
 
 function remove(num, bit) {
-    return num & ~(1 << (bit - 1));
+    return num & not(1 << (bit - 1));
 }
 
 function count(num) {
