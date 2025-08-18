@@ -62,9 +62,15 @@ export const buttonAction = {
         state = new GameMode();
     },
     recalc() {
-        board.recalculateAllNotes();
-        dom.displayBoard(board);
-        file.saveGame(board);
+        if (
+            confirm(
+                "Recalculate remaining notes using current values?\nAny recent note removals will be lost",
+            )
+        ) {
+            board.recalculateAllNotes();
+            dom.displayBoard(board);
+            file.saveGame(board);
+        }
     },
     clue() {
         move = calc.findMove(board);
@@ -182,9 +188,9 @@ class HintMode {
 
 class GameMode {
     constructor() {
-        dom.displayButtons(["clue", "recalc", "back", "forward", "restart", "reset"]);
+        dom.displayButtons(["clue", "recalc", "restart", "back", "forward", "reset"]);
         dom.displayMessage("Get solving!");
-        dom.displayDescription("Use both mouse buttons to toggle values and notes");
+        dom.displayDescription("Hint: use the right mouse button to directly set values");
     }
 
     valueClick(i) {
@@ -218,7 +224,7 @@ class SetupMode {
         dom.displayBoard(board);
         dom.displayButtons(["done", "reset"]);
         dom.displayMessage("Create start position");
-        dom.displayDescription("Click done when ready");
+        dom.displayDescription("");
     }
 
     valueClick(i) {

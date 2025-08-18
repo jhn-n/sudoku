@@ -66,11 +66,15 @@ function displayButtons(buttonTexts) {
     buttonsNode.innerHTML = "";
     for (const button of buttonTexts) {
         const newButton = document.createElement("div");
+        const newPopup = document.createElement("div");
+        newButton.classList.add(button);
         newButton.classList.add("button");
-        newButton.innerText = button;
+        newPopup.classList.add("button-popup");
+        newPopup.innerText = button;
         newButton.addEventListener("click", () => {
             buttonAction[button]();
         });
+        newButton.appendChild(newPopup);
         buttonsNode.appendChild(newButton);
     }
 }

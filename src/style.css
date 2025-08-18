@@ -1,17 +1,34 @@
 body {
-    box-sizing: border-box;
-    background-color: whitesmoke;
     --grid-color: whitesmoke;
-    --grid-width: clamp(45rem, 90vw, 80vh);
-    --value-fontsize: clamp(3rem, 6vw, 6vh);
-    --note-fontsize: clamp(1rem, 2vw, 2vh);
-}
-
-.grid {
+    --grid-width: clamp(35rem, 90vw, 75vh);
+    --value-fontsize: calc(var(--grid-width) / 15);
+    --note-fontsize: calc(var(--grid-width) / 42);
+    --main-fontsize: calc(var(--grid-width) / 30);
     font-family:
         ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
         "DejaVu Sans Mono", monospace;
+    box-sizing: border-box;
+    background-color: #333;
+    color: white;
+}
+
+/* * {
+    border: red 1px solid;
+} */
+
+header {
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    font-size: var(--main-fontsize);
+    margin: 0.3em;
+}
+
+.grid {
     background-color: var(--grid-color);
+    color: black;
     font-weight: normal;
     border: black 2px solid;
     width: var(--grid-width);
@@ -109,20 +126,89 @@ body {
 .buttonContainer {
     display: flex;
     justify-content: space-evenly;
-    margin: 5px 0;
+    width: var(--grid-width);
+    margin: 1em auto;
 }
 
 .button {
-    border: 1px black solid;
+    background-color: #222;
+    box-shadow: 2px 2px 2px black;
     cursor: pointer;
     user-select: none;
-    width: 6em;
+    width: calc(var(--grid-width) / 9);
+    height: 2em;
     text-align: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.button:hover {
+    background-color: rgb(122, 30, 175);
+}
+
+.button-popup {
+    position: absolute;
+    bottom: -100%;
+    background-color: white;
+    border-radius: 6px;
+    width: 100%;
+    color: black;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.button:hover > .button-popup {
+    opacity: 1;
+    transition: opacity 1s 0.5s;
+}
+
+
+.button.done {
+    background-image: url("./svg/check.svg");
+}
+
+.button.back {
+    background-image: url("./svg/back.svg");
+}
+
+.button.forward {
+    background-image: url("./svg/forward.svg");
+}
+
+.button.clue {
+    background-image: url("./svg/lightbulb.svg");
+}
+
+.button.show {
+    background-image: url("./svg/visibility.svg");
+}
+
+.button.hide {
+    background-image: url("./svg/close.svg");
+}
+
+.button.recalc {
+    background-image: url("./svg/calculate.svg");
+}
+
+.button.restart {
+    background-image: url("./svg/restart.svg");
+}
+
+.button.reset {
+    background-image: url("./svg/refresh.svg");
 }
 
 .messageContainer {
+    background-color: #222;
+    /* box-shadow: 2px 2px 2px black; */
+    font-size: var(--note-fontsize);
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
+    width: var(--grid-width);
+    margin: 1em auto;
+    padding: 0.5em;
 }
